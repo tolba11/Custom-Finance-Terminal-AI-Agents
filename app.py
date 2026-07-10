@@ -45,5 +45,7 @@ with c3:
                  use_container_width=True)
     st.page_link("pages/6__News.py", label="📰 News",
                  use_container_width=True)
+    st.page_link("pages/7__Events_Insiders.py", label="📅 Events & Insiders",
+                 use_container_width=True)
 
 render_footer(st)

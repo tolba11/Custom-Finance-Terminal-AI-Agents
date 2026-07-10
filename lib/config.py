@@ -68,3 +68,7 @@ def apply_base_style(st):
         """,
         unsafe_allow_html=True,
     )
+
+
+def get_finnhub_key():
+    return _get_key("FINNHUB_API_KEY")
