@@ -15,16 +15,26 @@ DISCLOSURE = (
 APP_NAME = "Stock Market Analyst"
 
 
+def _sanitize(val):
+    """Tolerate common paste mistakes: full URLs, quotes, whitespace."""
+    if not val:
+        return ""
+    val = str(val).strip().strip('"').strip("'")
+    if "api_key=" in val:  # someone pasted a whole URL
+        val = val.split("api_key=")[1].split("&")[0]
+    return val.strip()
+
+
 def _get_key(name):
     """Env var first (local .env), then Streamlit Cloud secrets."""
     val = os.getenv(name)
-    if val:
-        return val
-    try:
-        import streamlit as st
-        return st.secrets.get(name, "")
-    except Exception:
-        return ""
+    if not val:
+        try:
+            import streamlit as st
+            val = st.secrets.get(name, "")
+        except Exception:
+            val = ""
+    return _sanitize(val)
 
 
 def get_anthropic_key():
