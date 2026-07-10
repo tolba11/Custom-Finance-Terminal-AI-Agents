@@ -4,7 +4,7 @@ import streamlit as st
 
 from lib.config import get_anthropic_key
 
-MODEL = "claude-sonnet-4-5"
+MODELS = ["claude-sonnet-5", "claude-sonnet-4-5", "claude-haiku-4-5"]
 
 GUARDRAIL = (
     "You are an educational market analyst. Do NOT give buy, sell, or hold "
@@ -29,14 +29,20 @@ def _ask(prompt: str, max_tokens: int = 1500) -> str:
     client = _client()
     if client is None:
         return ""
-    try:
-        msg = client.messages.create(
-            model=MODEL, max_tokens=max_tokens, system=GUARDRAIL,
-            messages=[{"role": "user", "content": prompt}],
-        )
-        return "".join(b.text for b in msg.content if b.type == "text")
-    except Exception as e:
-        return f"⚠️ AI request failed: {e}"
+    last_err = None
+    for model in MODELS:
+        try:
+            msg = client.messages.create(
+                model=model, max_tokens=max_tokens, system=GUARDRAIL,
+                messages=[{"role": "user", "content": prompt}],
+            )
+            return "".join(b.text for b in msg.content if b.type == "text")
+        except Exception as e:
+            last_err = e
+            if "not_found" in str(e) or "404" in str(e):
+                continue
+            break
+    return f"⚠️ AI request failed: {last_err}"
 
 
 def key_missing() -> bool:
