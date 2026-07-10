@@ -170,13 +170,13 @@ facts = (f"Price ${price}, P/E {info.get('trailingPE')}, "
 
 with tab1:
     if claude_analyst.key_missing():
-        st.info("Add your ANTHROPIC_API_KEY to the .env file to enable AI analysis.")
+        st.info("Add your ANTHROPIC_API_KEY in the app Secrets to enable AI analysis.")
     elif st.button("Generate", key="bb_btn"):
         with st.spinner("Analyzing…"):
             st.markdown(claude_analyst.bull_bear_case(ticker, facts))
 with tab2:
     if claude_analyst.key_missing():
-        st.info("Add your ANTHROPIC_API_KEY to the .env file to enable AI analysis.")
+        st.info("Add your ANTHROPIC_API_KEY in the app Secrets to enable AI analysis.")
     elif st.button("Generate", key="da_btn"):
         with st.spinner("Analyzing…"):
             st.markdown(claude_analyst.deep_analysis(ticker, facts))

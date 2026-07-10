@@ -144,7 +144,7 @@ if port_hist is not None:
 st.divider()
 st.subheader("AI portfolio review")
 if claude_analyst.key_missing():
-    st.info("Add your ANTHROPIC_API_KEY to the .env file to enable AI analysis.")
+    st.info("Add your ANTHROPIC_API_KEY in the app Secrets to enable AI analysis.")
 elif st.button("Generate review"):
     facts = "; ".join(
         f"{r['Ticker']}: {r['Value']/total_value:.0%} of portfolio, "
