@@ -49,7 +49,7 @@ def key_missing() -> bool:
     return not get_anthropic_key()
 
 
-@st.cache_data(ttl=1800, show_spinner=False)
+@st.cache_data(ttl=1800, show_spinner=False, max_entries=24)
 def bull_bear_case(ticker: str, facts: str) -> str:
     return _ask(
         f"For {ticker}, write a balanced educational overview with two "
@@ -59,7 +59,7 @@ def bull_bear_case(ticker: str, facts: str) -> str:
     )
 
 
-@st.cache_data(ttl=1800, show_spinner=False)
+@st.cache_data(ttl=1800, show_spinner=False, max_entries=24)
 def deep_analysis(ticker: str, facts: str) -> str:
     return _ask(
         f"Write an educational deep-dive on {ticker} covering: business "
@@ -68,7 +68,7 @@ def deep_analysis(ticker: str, facts: str) -> str:
     )
 
 
-@st.cache_data(ttl=1800, show_spinner=False)
+@st.cache_data(ttl=1800, show_spinner=False, max_entries=24)
 def macro_pulse(facts: str) -> str:
     return _ask(
         "Write an educational macro pulse-check: what the following US "
@@ -77,7 +77,7 @@ def macro_pulse(facts: str) -> str:
     )
 
 
-@st.cache_data(ttl=1800, show_spinner=False)
+@st.cache_data(ttl=1800, show_spinner=False, max_entries=24)
 def portfolio_analysis(facts: str) -> str:
     return _ask(
         "Review this personal portfolio from an educational lens: "

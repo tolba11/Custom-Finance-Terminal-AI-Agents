@@ -5,10 +5,9 @@ from lib.config import apply_base_style, render_footer, render_sidebar
 from lib.logos import logo_img_html
 from lib.news import market_news, ticker_news, time_ago
 
-st.set_page_config(page_title="News", page_icon="📰", layout="wide")
 apply_base_style(st)
 render_sidebar(st)
-st.title("📰 News")
+st.title("News")
 
 
 def render_items(items):

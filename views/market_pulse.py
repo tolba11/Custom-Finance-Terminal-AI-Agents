@@ -10,10 +10,9 @@ from lib.market_data import (INDEX_TICKERS, SECTOR_ETFS, PERIOD_MAP,
                              get_history, get_history_bulk, get_quotes_bulk)
 from lib.news import market_news, time_ago
 
-st.set_page_config(page_title="Market Pulse", page_icon="📈", layout="wide")
 apply_base_style(st)
 render_sidebar(st)
-st.title("📈 Market Pulse")
+st.title("Market Pulse")
 
 period = st.segmented_control("Period", list(PERIOD_MAP.keys()),
                               default="1D", key="mp_period") or "1D"
@@ -85,7 +84,7 @@ if perf:
         marker_color=["#22c55e" if v >= 0 else "#ef4444" for v in s.values],
         text=[f"{v:+.2f}%" for v in s.values], textposition="outside",
     ))
-    fig.update_layout(template="plotly_dark", height=420,
+    fig.update_layout(template="plotly_white", height=420,
                       margin=dict(l=10, r=60, t=10, b=10),
                       xaxis_ticksuffix="%", paper_bgcolor="rgba(0,0,0,0)")
     st.plotly_chart(fig, use_container_width=True)
@@ -117,7 +116,7 @@ def render_mover_rows(items):
         st.markdown(
             f'<div style="display:flex;align-items:center;gap:8px;'
             f'padding:4px 0;">{logo_img_html(sym, 24)}'
-            f'<b>{sym}</b> <span style="color:#94a3b8;font-size:13px;">'
+            f'<b>{sym}</b> <span style="color:#71717a;font-size:13px;">'
             f'{name}</span><span style="margin-left:auto;">'
             f'{price:,.2f}</span><span style="color:{color};min-width:64px;'
             f'text-align:right;">{pct:+.2f}%</span></div>'

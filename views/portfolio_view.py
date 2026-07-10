@@ -11,12 +11,9 @@ from lib.market_data import get_history, get_quotes_bulk, \
 from lib.portfolio import load_portfolio, save_portfolio
 from lib.risk import compute_risk_score
 
-st.set_page_config(page_title="Portfolio", page_icon="💼", layout="wide")
 apply_base_style(st)
 render_sidebar(st)
-st.title("💼 Portfolio")
-st.caption("Stored locally in `data/portfolio.json` (gitignored). "
-           "Educational tracking only.")
+st.title("Portfolio")
 
 holdings = load_portfolio()
 
@@ -94,7 +91,7 @@ with c1:
     st.subheader("Allocation")
     fig = go.Figure(go.Pie(labels=valid["Ticker"], values=valid["Value"],
                            hole=0.45))
-    fig.update_layout(template="plotly_dark", height=360,
+    fig.update_layout(template="plotly_white", height=360,
                       margin=dict(l=10, r=10, t=10, b=10),
                       paper_bgcolor="rgba(0,0,0,0)")
     st.plotly_chart(fig, use_container_width=True)
@@ -109,7 +106,7 @@ with c2:
     if sectors:
         fig = go.Figure(go.Pie(labels=list(sectors.keys()),
                                values=list(sectors.values()), hole=0.45))
-        fig.update_layout(template="plotly_dark", height=360,
+        fig.update_layout(template="plotly_white", height=360,
                           margin=dict(l=10, r=10, t=10, b=10),
                           paper_bgcolor="rgba(0,0,0,0)")
         st.plotly_chart(fig, use_container_width=True)

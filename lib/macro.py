@@ -27,7 +27,7 @@ def _fred():
         return None
 
 
-@st.cache_data(ttl=3600, show_spinner=False)
+@st.cache_data(ttl=3600, show_spinner=False, max_entries=64)
 def get_series(series_id: str, years: int = 10) -> pd.Series:
     fred = _fred()
     if fred is None:

@@ -91,9 +91,9 @@ def logo_img_html(ticker: str, size: int = 28) -> str:
     if url:
         return (f'<img src="{url}" width="{size}" height="{size}" '
                 f'style="border-radius:6px;object-fit:contain;'
-                f'vertical-align:middle;background:#1e293b;padding:2px;"/>')
+                f'vertical-align:middle;background:#f4f4f5;padding:2px;"/>')
     letter = (ticker or "?")[0].upper()
     return (f'<span style="display:inline-flex;width:{size}px;height:{size}px;'
-            f'border-radius:6px;background:#334155;color:#e2e8f0;'
+            f'border-radius:6px;background:#e4e4e7;color:#3f3f46;'
             f'align-items:center;justify-content:center;font-size:{size//2}px;'
             f'vertical-align:middle;">{letter}</span>')

@@ -48,7 +48,7 @@ PERIOD_MAP = {
 }
 
 
-@st.cache_data(ttl=60, show_spinner=False)
+@st.cache_data(ttl=60, show_spinner=False, max_entries=256)
 def get_quote(ticker: str) -> dict:
     """Last price, previous close, change, and basic info for one ticker."""
     t = yf.Ticker(ticker)
@@ -83,7 +83,7 @@ def get_quote(ticker: str) -> dict:
     }
 
 
-@st.cache_data(ttl=300, show_spinner=False)
+@st.cache_data(ttl=300, show_spinner=False, max_entries=128)
 def get_history(ticker: str, period_label: str) -> pd.DataFrame:
     """OHLCV history for a period label from PERIOD_MAP."""
     period, interval = PERIOD_MAP.get(period_label, ("1y", "1d"))
@@ -93,14 +93,14 @@ def get_history(ticker: str, period_label: str) -> pd.DataFrame:
     return df.dropna(subset=["Close"]) if "Close" in df else df
 
 
-@st.cache_data(ttl=60, show_spinner=False)
+@st.cache_data(ttl=60, show_spinner=False, max_entries=256)
 def get_quotes_bulk(tickers: tuple) -> dict:
     """Quotes for many tickers via one bulk download."""
     out = {}
     try:
         df = yf.download(
             list(tickers), period="5d", interval="1d",
-            group_by="ticker", progress=False, threads=True,
+            group_by="ticker", progress=False, threads=False,
         )
         for tk in tickers:
             try:
@@ -124,7 +124,7 @@ def get_quotes_bulk(tickers: tuple) -> dict:
     return out
 
 
-@st.cache_data(ttl=300, show_spinner=False)
+@st.cache_data(ttl=300, show_spinner=False, max_entries=16)
 def get_history_bulk(tickers: tuple, period_label: str) -> dict:
     """Close-price history for many tickers keyed by ticker."""
     period, interval = PERIOD_MAP.get(period_label, ("1y", "1d"))
@@ -132,7 +132,7 @@ def get_history_bulk(tickers: tuple, period_label: str) -> dict:
     try:
         df = yf.download(
             list(tickers), period=period, interval=interval,
-            group_by="ticker", progress=False, threads=True,
+            group_by="ticker", progress=False, threads=False,
         )
         for tk in tickers:
             try:
@@ -147,7 +147,7 @@ def get_history_bulk(tickers: tuple, period_label: str) -> dict:
     return out
 
 
-@st.cache_data(ttl=600, show_spinner=False)
+@st.cache_data(ttl=600, show_spinner=False, max_entries=128)
 def get_stock_fundamentals(ticker: str) -> dict:
     """Full .info dict (best-effort)."""
     try:
@@ -156,7 +156,7 @@ def get_stock_fundamentals(ticker: str) -> dict:
         return {}
 
 
-@st.cache_data(ttl=600, show_spinner=False)
+@st.cache_data(ttl=600, show_spinner=False, max_entries=32)
 def get_etf_details(ticker: str) -> dict:
     """ETF metadata: info, top holdings, sector weights."""
     t = yf.Ticker(ticker)
@@ -184,7 +184,7 @@ def get_etf_details(ticker: str) -> dict:
     return out
 
 
-@st.cache_data(ttl=600, show_spinner=False)
+@st.cache_data(ttl=600, show_spinner=False, max_entries=128)
 def is_etf(ticker: str) -> bool:
     info = get_stock_fundamentals(ticker)
     return (info.get("quoteType") or "").upper() == "ETF"

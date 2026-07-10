@@ -66,7 +66,7 @@ def _rss_fallback(ticker: str = None, limit: int = 15) -> list:
         return []
 
 
-@st.cache_data(ttl=300, show_spinner=False)
+@st.cache_data(ttl=300, show_spinner=False, max_entries=64)
 def ticker_news(ticker: str, limit: int = 10) -> list:
     """News for one ticker."""
     items = []
@@ -81,7 +81,7 @@ def ticker_news(ticker: str, limit: int = 10) -> list:
     return items[:limit]
 
 
-@st.cache_data(ttl=300, show_spinner=False)
+@st.cache_data(ttl=300, show_spinner=False, max_entries=4)
 def market_news(limit: int = 15) -> list:
     """Aggregated market headlines from broad tickers, deduped, newest first."""
     seen, items = set(), []

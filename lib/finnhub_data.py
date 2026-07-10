@@ -29,7 +29,7 @@ def _get(path: str, params: dict = None):
     return None
 
 
-@st.cache_data(ttl=1800, show_spinner=False)
+@st.cache_data(ttl=1800, show_spinner=False, max_entries=4)
 def earnings_calendar(days_ahead: int = 14) -> list:
     start = date.today()
     end = start + timedelta(days=days_ahead)
@@ -49,14 +49,14 @@ def ipo_calendar(days_ahead: int = 30) -> list:
     return (data or {}).get("ipoCalendar") or []
 
 
-@st.cache_data(ttl=3600, show_spinner=False)
+@st.cache_data(ttl=3600, show_spinner=False, max_entries=64)
 def recommendation_trends(symbol: str) -> list:
     """Monthly analyst consensus counts (third-party data), newest first."""
     data = _get("/stock/recommendation", {"symbol": symbol.upper()})
     return data or []
 
 
-@st.cache_data(ttl=3600, show_spinner=False)
+@st.cache_data(ttl=3600, show_spinner=False, max_entries=64)
 def insider_transactions(symbol: str, limit: int = 25) -> list:
     data = _get("/stock/insider-transactions", {"symbol": symbol.upper()})
     items = (data or {}).get("data") or []

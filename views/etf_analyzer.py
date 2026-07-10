@@ -11,10 +11,9 @@ from lib.market_data import (PERIOD_MAP, get_etf_details, get_history,
                              get_quote, get_stock_fundamentals)
 from lib.risk import compute_risk_score
 
-st.set_page_config(page_title="ETF Analyzer", page_icon="🧺", layout="wide")
 apply_base_style(st)
 render_sidebar(st)
-st.title("🧺 ETF Analyzer")
+st.title("ETF Analyzer")
 
 c1, c2 = st.columns([1, 3])
 with c1:
@@ -40,7 +39,7 @@ name = info.get("longName") or info.get("shortName") or ticker
 st.markdown(
     f'<div style="display:flex;align-items:center;gap:14px;">'
     f'{logo_img_html(ticker, 56)}<div><h2 style="margin:0;">{name} '
-    f'<span style="color:#94a3b8;font-size:0.7em;">{ticker}</span></h2>'
+    f'<span style="color:#71717a;font-size:0.7em;">{ticker}</span></h2>'
     f'</div></div>', unsafe_allow_html=True)
 
 m1, m2, m3, m4 = st.columns(4)
@@ -110,7 +109,7 @@ if sectors:
                            marker_color="#38bdf8",
                            text=[f"{v:.1f}%" for v in s.values],
                            textposition="outside"))
-    fig.update_layout(template="plotly_dark", height=380,
+    fig.update_layout(template="plotly_white", height=380,
                       margin=dict(l=10, r=60, t=10, b=10),
                       xaxis_ticksuffix="%", paper_bgcolor="rgba(0,0,0,0)")
     st.plotly_chart(fig, use_container_width=True)
@@ -130,9 +129,9 @@ if holdings is not None and not holdings.empty:
         with hcols[i % 2]:
             st.markdown(
                 f'<div style="display:flex;align-items:center;gap:8px;'
-                f'padding:5px 0;border-bottom:1px solid #1e293b;">'
+                f'padding:5px 0;border-bottom:1px solid #e4e4e7;">'
                 f'{logo_img_html(sym, 26)}<b>{sym}</b>'
-                f'<span style="color:#94a3b8;font-size:13px;">{hname}</span>'
+                f'<span style="color:#71717a;font-size:13px;">{hname}</span>'
                 f'<span style="margin-left:auto;">'
                 f'{w:.2%}</span></div>' if w is not None else
                 f'<div style="padding:5px 0;">{sym} {hname}</div>',
@@ -168,9 +167,9 @@ if peers:
             and cheapest["Expense ratio (%)"] < my_er):
         bps = (my_er - cheapest["Expense ratio (%)"]) * 100
         dollars = (my_er - cheapest["Expense ratio (%)"]) / 100 * 100000
-        st.info(f"💡 **{cheapest['Ticker']}** tracks a similar exposure at "
+        st.info(f" **{cheapest['Ticker']}** tracks a similar exposure at "
                 f"{cheapest['Expense ratio (%)']:.2f}% — about "
                 f"**{bps:.0f} bps lower**, or roughly **${dollars:,.0f}/yr "
-                f"on a $100K position**. Shown for cost awareness only.")
+                f"on a $100K position**.")
 
 render_footer(st)

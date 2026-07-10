@@ -10,10 +10,9 @@ from lib.market_data import (PERIOD_MAP, get_history, get_quote,
 from lib.news import ticker_news, time_ago
 from lib.signals import at_a_glance, fundamental_score, technical_score
 
-st.set_page_config(page_title="Stock Analyzer", page_icon="🔍", layout="wide")
 apply_base_style(st)
 render_sidebar(st)
-st.title("🔍 Stock Analyzer")
+st.title("Stock Analyzer")
 
 c1, c2 = st.columns([1, 3])
 with c1:
@@ -41,8 +40,8 @@ sector = " · ".join(x for x in (info.get("sector"),
 st.markdown(
     f'<div style="display:flex;align-items:center;gap:14px;">'
     f'{logo_img_html(ticker, 64)}<div><h2 style="margin:0;">{name} '
-    f'<span style="color:#94a3b8;font-size:0.7em;">{ticker}</span></h2>'
-    f'<span style="color:#94a3b8;">{sector}</span></div></div>',
+    f'<span style="color:#71717a;font-size:0.7em;">{ticker}</span></h2>'
+    f'<span style="color:#71717a;">{sector}</span></div></div>',
     unsafe_allow_html=True)
 
 m1, m2, m3, m4 = st.columns(4)
@@ -67,8 +66,6 @@ st.plotly_chart(render_price_chart(df, view=view, baseline_price=baseline,
 # ---- Snapshot ----
 st.divider()
 st.subheader("Snapshot")
-st.caption("Descriptive scores summarizing observable characteristics. "
-           "These are not ratings or recommendations.")
 
 tech = technical_score(get_history(ticker, "1Y"))
 fund = fundamental_score(info)
@@ -81,8 +78,8 @@ with g1:
         for label, value in chips:
             st.markdown(
                 f'<div style="display:flex;justify-content:space-between;'
-                f'padding:5px 0;border-bottom:1px solid #1e293b;">'
-                f'<span style="color:#94a3b8;">{label}</span>'
+                f'padding:5px 0;border-bottom:1px solid #e4e4e7;">'
+                f'<span style="color:#71717a;">{label}</span>'
                 f'<b>{value}</b></div>', unsafe_allow_html=True)
 with g2:
     st.plotly_chart(render_gauge(tech["score"], "Technical strength",
@@ -151,7 +148,7 @@ for i, (group, rows) in enumerate(stats.items()):
         for label, value in rows:
             st.markdown(
                 f'<div style="display:flex;justify-content:space-between;'
-                f'padding:3px 0;"><span style="color:#94a3b8;">{label}'
+                f'padding:3px 0;"><span style="color:#71717a;">{label}'
                 f'</span><span>{value}</span></div>',
                 unsafe_allow_html=True)
 

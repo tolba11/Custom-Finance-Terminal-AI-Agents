@@ -8,11 +8,9 @@ from lib import finnhub_data as fh
 from lib.config import apply_base_style, render_footer, render_sidebar
 from lib.logos import logo_img_html
 
-st.set_page_config(page_title="Events & Insiders", page_icon="📅",
-                   layout="wide")
 apply_base_style(st)
 render_sidebar(st)
-st.title("📅 Events & Insiders")
+st.title("Events & Insiders")
 
 if fh.key_missing():
     st.info("Add your free **FINNHUB_API_KEY** to the app Secrets to enable "
@@ -38,7 +36,7 @@ if earnings:
         })
     st.dataframe(pd.DataFrame(rows), hide_index=True,
                  use_container_width=True, height=420)
-    st.caption("Estimates are third-party analyst consensus via Finnhub.")
+    st.caption("Source: analyst consensus estimates, Finnhub.")
 else:
     st.warning("No earnings data returned — the free Finnhub tier limits "
                "this endpoint at times. Try again later.")
@@ -81,14 +79,12 @@ if ticker:
                 if col in df:
                     fig.add_trace(go.Bar(x=df["period"], y=df[col],
                                          name=label, marker_color=color))
-            fig.update_layout(barmode="stack", template="plotly_dark",
+            fig.update_layout(barmode="stack", template="plotly_white",
                               height=380, margin=dict(l=10, r=10, t=20, b=10),
                               legend=dict(orientation="h", y=-0.15),
                               paper_bgcolor="rgba(0,0,0,0)")
             st.plotly_chart(fig, use_container_width=True)
-            st.caption("Counts of third-party analyst ratings via Finnhub — "
-                       "shown for information only, not a recommendation "
-                       "by this dashboard.")
+            st.caption("Source: analyst ratings, Finnhub.")
         else:
             st.write("No analyst trend data for this symbol.")
 
@@ -100,20 +96,19 @@ if ticker:
         if ins:
             for t in ins[:15]:
                 chg = t.get("change") or 0
-                color = "#22c55e" if chg > 0 else "#ef4444" if chg < 0 else "#94a3b8"
+                color = "#22c55e" if chg > 0 else "#ef4444" if chg < 0 else "#71717a"
                 verb = "acquired" if chg > 0 else "disposed of" if chg < 0 else "held"
                 price = t.get("transactionPrice")
                 price_txt = f" @ ${price:,.2f}" if price else ""
                 st.markdown(
                     f'<div style="padding:5px 0;border-bottom:1px solid '
-                    f'#1e293b;"><b>{t.get("name", "?")}</b> '
+                    f'#e4e4e7;"><b>{t.get("name", "?")}</b> '
                     f'<span style="color:{color};">{verb} '
                     f'{abs(chg):,.0f} shares</span>'
-                    f'<span style="color:#94a3b8;">{price_txt} · '
+                    f'<span style="color:#71717a;">{price_txt} · '
                     f'{t.get("transactionDate", "")}</span></div>',
                     unsafe_allow_html=True)
-            st.caption("Source: SEC filings via Finnhub. Factual record of "
-                       "insider activity — not a signal.")
+            st.caption("Source: SEC Form 4 filings, Finnhub.")
         else:
             st.write("No recent insider transactions found.")
 
