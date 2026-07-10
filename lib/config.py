@@ -48,4 +48,13 @@ def render_sidebar(st):
 
 
 def apply_base_style(st):
-    """Larger base font + dar
+    """Larger base font + dark-mode friendly tweaks."""
+    st.markdown(
+        """
+        <style>
+        .main .block-container { font-size: 17px; }
+        [data-testid="stMetricValue"] { font-size: 1.6rem; }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
