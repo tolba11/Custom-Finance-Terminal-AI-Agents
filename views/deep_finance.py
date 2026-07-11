@@ -2,6 +2,7 @@
 import streamlit as st
 
 from lib import deep_finance as dfn
+from lib.attachments import process_files
 from lib.config import apply_base_style, render_sidebar
 
 apply_base_style(st)
@@ -45,7 +46,7 @@ history = st.session_state.setdefault("df_history", [])
 
 for turn in history:
     with st.chat_message(turn["role"]):
-        st.markdown(turn["content"])
+        st.markdown(turn.get("label") or turn["content"])
         if turn.get("citations"):
             st.markdown(
                 '<div style="font-family:Consolas,monospace;font-size:'
@@ -56,23 +57,39 @@ for turn in history:
                             f'style="font-size:0.78rem;color:#c2410c;">'
                             f'[{i}] {c[:90]}</a>', unsafe_allow_html=True)
 
-prompt = st.chat_input(f"Ask {model_name} anything markets…")
-if prompt:
-    history.append({"role": "user", "content": prompt})
+submission = st.chat_input(
+    f"Ask {model_name} anything markets… (attach any files with the + )",
+    accept_file="multiple")
+if submission:
+    prompt = submission.text or "Please analyze the attached file(s)."
+    blocks, file_text, chips, notes = process_files(submission.files)
+    label = prompt
+    if chips:
+        label += "\n\n" + " ".join(f"`[{c}]`" for c in chips)
+    history.append({"role": "user", "content": prompt, "label": label})
     with st.chat_message("user"):
-        st.markdown(prompt)
+        st.markdown(label)
+        for n in notes:
+            st.caption(n)
     msgs = [{"role": t["role"], "content": t["content"]} for t in history]
     with st.chat_message("assistant"):
         with st.spinner(f"{model_name} thinking…"):
             if model["provider"] == "anthropic":
                 context = dfn.web_ground(prompt) if ground else ""
-                text, err = dfn.chat_anthropic(model["id"], msgs, context)
+                text, err = dfn.chat_anthropic(model["id"], msgs, context,
+                                               blocks=blocks,
+                                               file_text=file_text)
                 cites = []
                 if context and text:
                     text += ("\n\n*Grounded with live Perplexity Search "
                              "results.*")
             else:
-                text, cites, err = dfn.chat_perplexity(model["id"], msgs)
+                if blocks:
+                    st.caption("Images/PDF pages attach natively to Claude "
+                               "models; Perplexity receives extracted text "
+                               "only.")
+                text, cites, err = dfn.chat_perplexity(model["id"], msgs,
+                                                       file_text=file_text)
         if err:
             st.error(f"{model_name} error — {err}")
             history.pop()

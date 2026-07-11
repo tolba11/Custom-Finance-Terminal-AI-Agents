@@ -33,23 +33,37 @@ def perplexity_ready():
     return bool(get_perplexity_key())
 
 
-def chat_anthropic(model_id, messages, context=""):
-    """messages: [{'role','content'}...]. Returns (text, error)."""
+def chat_anthropic(model_id, messages, context="", blocks=None,
+                   file_text=""):
+    """messages: [{'role','content'}...]. blocks are Claude-native
+    attachment blocks (images/PDFs) for the latest user turn.
+    Returns (text, error)."""
     import anthropic
     client = anthropic.Anthropic(api_key=get_anthropic_key())
     system = SYSTEM + (f"\n\nLive web context gathered for this query:\n"
                        f"{context}" if context else "")
+    msgs = [dict(m) for m in messages[-16:]]
+    if msgs and (blocks or file_text):
+        last = msgs[-1]
+        text = last["content"]
+        if file_text:
+            text = f"{text}\n\nATTACHED FILE CONTENTS:\n{file_text}"
+        last["content"] = (blocks or []) + [{"type": "text", "text": text}]
     try:
         r = client.messages.create(
             model=model_id, max_tokens=2000, system=system,
-            messages=messages[-16:])
+            messages=msgs)
         return "".join(b.text for b in r.content if b.type == "text"), ""
     except Exception as e:
         return "", f"{type(e).__name__}: {e}"
 
 
-def chat_perplexity(model_id, messages):
+def chat_perplexity(model_id, messages, file_text=""):
     """Returns (text, citations list, error)."""
+    messages = [dict(m) for m in messages]
+    if messages and file_text:
+        messages[-1]["content"] += (f"\n\nATTACHED FILE CONTENTS:\n"
+                                    f"{file_text}")
     try:
         r = requests.post(
             "https://api.perplexity.ai/chat/completions",
