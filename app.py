@@ -8,6 +8,7 @@ pages = [
     st.Page("views/home.py", title="Home", default=True),
     st.Page("views/market_pulse.py", title="Market Pulse"),
     st.Page("views/stock_analyzer.py", title="Stock Analyzer"),
+    st.Page("views/equity_research.py", title="Equity Research"),
     st.Page("views/etf_analyzer.py", title="ETF Analyzer"),
     st.Page("views/macro.py", title="Macro"),
     st.Page("views/portfolio_view.py", title="Portfolio"),
