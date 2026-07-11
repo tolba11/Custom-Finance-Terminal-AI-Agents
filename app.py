@@ -15,14 +15,15 @@ pages = [
     st.Page("views/news_view.py", title="News"),
     st.Page("views/events.py", title="Events & Insiders"),
     st.Page("views/compound_ai.py", title="Compound AI"),
+    st.Page("views/perceptis_ai.py", title="Perceptis AI"),
 ]
 
 pg = st.navigation(pages)
 
 # Auto-refresh: rerun every 15 minutes so quotes, charts, and news stay
-# current without a manual reload. Paused on Equity Research (so a long
-# agent run is never interrupted) and Compound AI (embedded session).
-if pg.title not in ("Equity Research", "Compound AI"):
+# current without a manual reload. Paused on Equity Research so a long
+# agent run is never interrupted.
+if pg.title != "Equity Research":
     try:
         from streamlit_autorefresh import st_autorefresh
         st_autorefresh(interval=15 * 60 * 1000, key="tt_autorefresh")

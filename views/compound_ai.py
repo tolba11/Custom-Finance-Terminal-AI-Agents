@@ -1,6 +1,5 @@
-"""Compound AI — embedded third-party financial modeling copilot."""
+"""Compound AI — third-party financial modeling copilot (launch panel)."""
 import streamlit as st
-import streamlit.components.v1 as components
 
 from lib.config import apply_base_style, render_footer, render_sidebar
 
@@ -13,7 +12,6 @@ st.markdown(
     '<div class="tt-subtitle">THIRD-PARTY SERVICE — COMPOUND '
     '(GETCOMPOUND.AI)</div>', unsafe_allow_html=True)
 
-# ---- Capability panel (attributed to Compound) ----
 c1, c2 = st.columns([2, 1])
 with c1:
     st.markdown(
@@ -42,23 +40,12 @@ with c1:
             f'</div>', unsafe_allow_html=True)
 with c2:
     st.markdown('<div class="tt-func">'
-                '<span class="tt-func-name">Session</span><br>'
-                '<span class="tt-func-desc">Log in once in the embedded '
-                'window below, or open Compound in its own tab for full '
-                'screen work.</span></div>', unsafe_allow_html=True)
-    st.link_button("Open Compound in new tab", COMPOUND_URL,
-                   use_container_width=True)
-
-st.divider()
-
-# ---- Embedded workspace ----
-mode = st.segmented_control("Workspace", ["Embedded", "Hidden"],
-                            default="Embedded", key="compound_mode")
-if mode == "Embedded":
-    components.iframe(COMPOUND_URL, height=920, scrolling=True)
-    st.caption(
-        "If the panel stays blank or login loops, Compound (or its SSO "
-        "provider) blocks running inside another page — use the new-tab "
-        "button; your browser keeps you signed in there.")
+                '<span class="tt-func-name">Workspace</span><br>'
+                '<span class="tt-func-desc">Compound does not permit '
+                'embedding inside other applications, so it opens in its '
+                'own browser tab. Your browser keeps you signed in between '
+                'visits.</span></div>', unsafe_allow_html=True)
+    st.link_button("Log in to Compound", COMPOUND_URL,
+                   type="primary", use_container_width=True)
 
 render_footer(st)
