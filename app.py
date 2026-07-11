@@ -29,13 +29,19 @@ if pg.title not in ("Equity Research", "Compound AI"):
     except Exception:
         pass
 
-from datetime import datetime
-from zoneinfo import ZoneInfo
-_now = datetime.now(ZoneInfo("US/Eastern"))
+from datetime import datetime, timezone
+try:
+    from zoneinfo import ZoneInfo
+    _now = datetime.now(ZoneInfo("America/New_York"))
+    _tz = "ET"
+except Exception:
+    _now = datetime.now(timezone.utc)
+    _tz = "UTC"
 st.sidebar.markdown(
     f'<div style="font-family:Consolas,monospace;font-size:0.68rem;'
     f'letter-spacing:0.08em;color:#71717a;padding-top:6px;">'
-    f'AUTO-REFRESH 15 MIN<br>UPDATED {_now.strftime("%H:%M ET · %b %d")}'
+    f'AUTO-REFRESH 15 MIN<br>UPDATED '
+    f'{_now.strftime("%H:%M")} {_tz} · {_now.strftime("%b %d")}'
     f'</div>', unsafe_allow_html=True)
 
 try:
