@@ -31,7 +31,7 @@ with c2:
                                  default="Shallow",
                                  key="er_depth") or "Shallow"
 with c3:
-    mode = st.segmented_control("Model", ["Standard", "Deep think"],
+    mode = st.segmented_control("Model", ["Standard", "Opus 4.8"],
                                 default="Standard",
                                 key="er_mode") or "Standard"
 with c4:
@@ -39,9 +39,11 @@ with c4:
     run = st.button("Run analysis", type="primary",
                     use_container_width=True)
 
-est = {"Shallow": "~60-90s", "Medium": "~2 min", "Deep": "~3-4 min"}[depth]
+est = {"Shallow": "~60-90s", "Medium": "~2 min", "Deep": "~3-5 min"}[depth]
+cost = ("roughly $0.05-0.15/run" if mode == "Standard"
+        else "roughly $1-3/run — Opus is the premium model")
 st.caption(f"Runs eleven-plus model calls on your Anthropic key "
-           f"({est}, credits are consumed per run).")
+           f"({est}, {cost}).")
 
 left, right = st.columns([1, 2.6], gap="medium")
 

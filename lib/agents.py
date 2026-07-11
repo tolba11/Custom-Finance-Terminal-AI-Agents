@@ -15,8 +15,9 @@ from lib.news import ticker_news
 from lib.signals import technical_score
 
 MODEL_SETS = {
-    "Standard": ["claude-haiku-4-5", "claude-sonnet-5", "claude-sonnet-4-5"],
-    "Deep think": ["claude-sonnet-5", "claude-sonnet-4-5", "claude-haiku-4-5"],
+    "Standard": ["claude-haiku-4-5", "claude-opus-4-8", "claude-sonnet-5"],
+    "Opus 4.8": ["claude-opus-4-8", "claude-opus-4-5", "claude-sonnet-5",
+                 "claude-haiku-4-5"],
 }
 
 DEPTH_ROUNDS = {"Shallow": 0, "Medium": 1, "Deep": 2}
