@@ -72,6 +72,29 @@ if not hist.empty:
                       paper_bgcolor="rgba(0,0,0,0)")
     st.plotly_chart(fig, use_container_width=True)
 
+# ---- Commodities (Alpha Vantage) ----
+from lib import alphavantage as av
+if not av.key_missing():
+    st.divider()
+    st.subheader("Commodities")
+    ccols = st.columns(3)
+    for col, (fn, label) in zip(ccols, [("WTI", "WTI Crude ($/bbl)"),
+                                        ("BRENT", "Brent Crude ($/bbl)"),
+                                        ("COPPER", "Copper ($/lb)")]):
+        data, cerr = av.av_commodity(fn)
+        vals = (data or {}).get("data", [])
+        try:
+            latest = next(v for v in vals if v.get("value") not in
+                          ("", ".", None))
+            prev = vals[vals.index(latest) + 1]
+            delta = (float(latest["value"]) / float(prev["value"]) - 1) * 100
+            col.metric(label, f"{float(latest['value']):,.2f}",
+                       f"{delta:+.1f}% m/m")
+        except (StopIteration, IndexError, ValueError, KeyError):
+            col.metric(label, "—")
+    st.caption("Monthly series via Alpha Vantage, cached 24h to respect "
+               "the free-tier quota.")
+
 # ---- Claude pulse-check ----
 st.divider()
 st.subheader("AI macro pulse-check")

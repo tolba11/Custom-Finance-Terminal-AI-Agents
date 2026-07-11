@@ -178,3 +178,7 @@ def apply_base_style(st):
         """,
         unsafe_allow_html=True,
     )
+
+
+def get_alpha_vantage_key():
+    return _get_key("ALPHA_VANTAGE_API_KEY")

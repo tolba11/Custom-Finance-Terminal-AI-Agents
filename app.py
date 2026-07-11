@@ -9,6 +9,7 @@ pages = [
     st.Page("views/market_pulse.py", title="Market Pulse"),
     st.Page("views/stock_analyzer.py", title="Stock Analyzer"),
     st.Page("views/equity_research.py", title="Equity Research"),
+    st.Page("views/fundamentals.py", title="Fundamental Analysis"),
     st.Page("views/etf_analyzer.py", title="ETF Analyzer"),
     st.Page("views/macro.py", title="Macro"),
     st.Page("views/portfolio_view.py", title="Portfolio"),
@@ -18,6 +19,7 @@ pages = [
     st.Page("views/technology.py", title="Technology"),
     st.Page("views/compound_ai.py", title="Compound AI"),
     st.Page("views/perceptis_ai.py", title="Perceptis AI"),
+    st.Page("views/pretus_ai.py", title="Pretus AI"),
 ]
 
 pg = st.navigation(pages)

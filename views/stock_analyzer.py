@@ -183,6 +183,37 @@ with tab2:
         with st.spinner("Analyzing…"):
             st.markdown(claude_analyst.deep_analysis(ticker, facts))
 with tab3:
+    from lib import alphavantage as av
+    if not av.key_missing():
+        s_data, s_err = av.av_news_sentiment(ticker)
+        feed = (s_data or {}).get("feed", [])
+        if feed:
+            scores = []
+            for a in feed:
+                for t in a.get("ticker_sentiment", []):
+                    if t.get("ticker") == ticker:
+                        try:
+                            scores.append(float(t["ticker_sentiment_score"]))
+                        except (ValueError, KeyError):
+                            pass
+            if scores:
+                avg = sum(scores) / len(scores)
+                lbl = ("Bullish tilt" if avg > 0.15 else
+                       "Bearish tilt" if avg < -0.15 else "Neutral")
+                color = ("#047857" if avg > 0.15 else
+                         "#b91c1c" if avg < -0.15 else "#71717a")
+                st.markdown(
+                    f'<div style="border:1px solid #e4e4e7;border-left:'
+                    f'3px solid {color};padding:0.5rem 0.8rem;'
+                    f'margin-bottom:0.6rem;background:#fff;">'
+                    f'<span style="font-family:Consolas,monospace;'
+                    f'font-size:0.7rem;letter-spacing:0.08em;'
+                    f'color:#71717a;">NEWS SENTIMENT (ALPHA VANTAGE, '
+                    f'{len(scores)} ARTICLES)</span><br>'
+                    f'<b style="color:{color};">{lbl}</b> '
+                    f'<span style="font-family:Consolas,monospace;'
+                    f'color:#71717a;">score {avg:+.2f}</span></div>',
+                    unsafe_allow_html=True)
     for item in ticker_news(ticker, limit=6):
         with st.container(border=True):
             st.markdown(f"**{item['title']}**")
