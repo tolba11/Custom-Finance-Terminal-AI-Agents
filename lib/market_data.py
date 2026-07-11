@@ -147,7 +147,7 @@ def get_history_bulk(tickers: tuple, period_label: str) -> dict:
     return out
 
 
-@st.cache_data(ttl=600, show_spinner=False, max_entries=128)
+@st.cache_data(ttl=900, show_spinner=False, max_entries=128)
 def get_stock_fundamentals(ticker: str) -> dict:
     """Full .info dict (best-effort)."""
     try:

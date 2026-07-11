@@ -19,6 +19,25 @@ pages = [
 
 pg = st.navigation(pages)
 
+# Auto-refresh: rerun every 15 minutes so quotes, charts, and news stay
+# current without a manual reload. Paused on Equity Research (so a long
+# agent run is never interrupted) and Compound AI (embedded session).
+if pg.title not in ("Equity Research", "Compound AI"):
+    try:
+        from streamlit_autorefresh import st_autorefresh
+        st_autorefresh(interval=15 * 60 * 1000, key="tt_autorefresh")
+    except Exception:
+        pass
+
+from datetime import datetime
+from zoneinfo import ZoneInfo
+_now = datetime.now(ZoneInfo("US/Eastern"))
+st.sidebar.markdown(
+    f'<div style="font-family:Consolas,monospace;font-size:0.68rem;'
+    f'letter-spacing:0.08em;color:#71717a;padding-top:6px;">'
+    f'AUTO-REFRESH 15 MIN<br>UPDATED {_now.strftime("%H:%M ET · %b %d")}'
+    f'</div>', unsafe_allow_html=True)
+
 try:
     pg.run()
 except Exception:

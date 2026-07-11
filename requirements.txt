@@ -6,3 +6,4 @@ fredapi>=0.5.1
 python-dotenv>=1.0.0
 anthropic>=0.34.0
 requests>=2.31.0
+streamlit-autorefresh>=1.0.1

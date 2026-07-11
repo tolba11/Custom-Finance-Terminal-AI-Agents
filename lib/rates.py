@@ -11,7 +11,7 @@ CURVE_SERIES = {
 }
 
 
-@st.cache_data(ttl=3600, show_spinner=False)
+@st.cache_data(ttl=900, show_spinner=False)
 def get_yield_curve() -> pd.Series:
     """Latest yield per tenor. Empty series if no FRED key."""
     points = {}
@@ -22,7 +22,7 @@ def get_yield_curve() -> pd.Series:
     return pd.Series(points)
 
 
-@st.cache_data(ttl=3600, show_spinner=False)
+@st.cache_data(ttl=900, show_spinner=False)
 def get_curve_history(tenors=("2Y", "10Y"), years: int = 10) -> pd.DataFrame:
     df = pd.DataFrame({t: get_series(CURVE_SERIES[t], years=years)
                        for t in tenors if t in CURVE_SERIES})

@@ -109,22 +109,31 @@ def get_movers():
 def render_mover_rows(items):
     for it in items[:6]:
         sym = it.get("symbol", "")
-        name = (it.get("shortName") or it.get("longName") or "")[:24]
+        name = it.get("shortName") or it.get("longName") or ""
         price = it.get("regularMarketPrice")
         pct = it.get("regularMarketChangePercent")
-        color = "#22c55e" if (pct or 0) >= 0 else "#ef4444"
-        st.markdown(
-            f'<div style="display:flex;align-items:center;gap:8px;'
-            f'padding:4px 0;">{logo_img_html(sym, 24)}'
-            f'<b>{sym}</b> <span style="color:#71717a;font-size:13px;">'
-            f'{name}</span><span style="margin-left:auto;">'
-            f'{price:,.2f}</span><span style="color:{color};min-width:64px;'
-            f'text-align:right;">{pct:+.2f}%</span></div>'
-            if price is not None and pct is not None else
-            f'<div style="padding:4px 0;">{logo_img_html(sym, 24)} '
-            f'<b>{sym}</b></div>',
-            unsafe_allow_html=True)
-
+        color = "#047857" if (pct or 0) >= 0 else "#b91c1c"
+        if price is not None and pct is not None:
+            st.markdown(
+                f'<div style="display:grid;'
+                f'grid-template-columns:26px 3.4em minmax(0,1fr) 4.6em 4.6em;'
+                f'gap:8px;align-items:center;padding:6px 0;'
+                f'border-bottom:1px solid #f4f4f5;">'
+                f'{logo_img_html(sym, 22)}'
+                f'<b style="font-size:0.85rem;">{sym}</b>'
+                f'<span style="color:#71717a;font-size:12px;'
+                f'white-space:nowrap;overflow:hidden;'
+                f'text-overflow:ellipsis;">{name}</span>'
+                f'<span style="text-align:right;font-family:Consolas,'
+                f'monospace;font-size:0.85rem;">{price:,.2f}</span>'
+                f'<span style="color:{color};text-align:right;'
+                f'font-family:Consolas,monospace;font-size:0.85rem;">'
+                f'{pct:+.2f}%</span></div>',
+                unsafe_allow_html=True)
+        else:
+            st.markdown(f'<div style="padding:6px 0;">'
+                        f'{logo_img_html(sym, 22)} <b>{sym}</b></div>',
+                        unsafe_allow_html=True)
 
 movers = get_movers()
 c1, c2, c3 = st.columns(3)

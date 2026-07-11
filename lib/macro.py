@@ -27,7 +27,7 @@ def _fred():
         return None
 
 
-@st.cache_data(ttl=3600, show_spinner=False, max_entries=64)
+@st.cache_data(ttl=900, show_spinner=False, max_entries=64)
 def get_series(series_id: str, years: int = 10) -> pd.Series:
     fred = _fred()
     if fred is None:
@@ -47,7 +47,7 @@ def yoy(series: pd.Series) -> pd.Series:
     return (series.pct_change(12) * 100).dropna()
 
 
-@st.cache_data(ttl=3600, show_spinner=False)
+@st.cache_data(ttl=900, show_spinner=False)
 def get_indicators() -> dict:
     """{label: {'series': pd.Series, 'latest': float, 'desc': str}}"""
     out = {}
