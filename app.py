@@ -13,6 +13,7 @@ pages = [
     st.Page("views/portfolio_view.py", title="Portfolio"),
     st.Page("views/news_view.py", title="News"),
     st.Page("views/events.py", title="Events & Insiders"),
+    st.Page("views/compound_ai.py", title="Compound AI"),
 ]
 
 pg = st.navigation(pages)
