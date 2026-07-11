@@ -47,6 +47,66 @@ def fetch_pe_deal_headlines(limit: int = 25) -> list:
 
 # ---------- VC Traded: beehiiv archive ----------
 
+BROWSER_HEADERS = {
+    "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                   "AppleWebKit/537.36 (KHTML, like Gecko) "
+                   "Chrome/126.0.0.0 Safari/537.36"),
+    "Accept": ("text/html,application/xhtml+xml,application/xml;q=0.9,"
+               "image/avif,image/webp,*/*;q=0.8"),
+    "Accept-Language": "en-US,en;q=0.9",
+    "Referer": "https://vc.traded.co/",
+}
+
+_DATE_RE = re.compile(
+    r"^((?:\d+\s+(?:minute|hour|day)s?\s+ago)|"
+    r"(?:[A-Z][a-z]{2}\s+\d{1,2},\s+\d{4}))")
+
+
+def _strip_tags(fragment: str) -> str:
+    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", fragment)).strip()
+
+
+def _tradedvc_from_anchors(html: str) -> list:
+    """Beehiiv archive cards: each post has 1-3 anchors to the same /p/
+    slug (title anchor, date+title+summary anchor, author anchor). Strip
+    tags, group by slug, reconstruct title/date/summary."""
+    groups = {}
+    for m in re.finditer(
+            r'<a[^>]+href="((?:https://vc\.traded\.co)?/p/[^"?#]+)"'
+            r'[^>]*>(.*?)</a>', html, re.DOTALL):
+        link = m.group(1)
+        if link.startswith("/"):
+            link = "https://vc.traded.co" + link
+        text = _strip_tags(m.group(2))
+        if len(text) >= 15:
+            groups.setdefault(link, []).append(text)
+    out = []
+    for link, texts in groups.items():
+        texts = sorted(set(texts), key=len)
+        date, summary = "", ""
+        if len(texts) > 1:
+            title = texts[0]
+            longer = texts[-1]
+            dm = _DATE_RE.match(longer)
+            if dm:
+                date = dm.group(1)
+                longer = longer[len(date):].strip()
+            if longer.startswith(title):
+                summary = longer[len(title):].strip()
+            else:
+                summary = longer
+        else:
+            longer = texts[0]
+            dm = _DATE_RE.match(longer)
+            if dm:
+                date = dm.group(1)
+                longer = longer[len(date):].strip()
+            title = longer[:220]
+        out.append({"title": title, "summary": summary[:300],
+                    "link": link, "date": date})
+    return out
+
+
 def _tradedvc_from_next_data(html: str) -> list:
     m = re.search(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>',
                   html, re.DOTALL)
@@ -62,11 +122,11 @@ def _tradedvc_from_next_data(html: str) -> list:
                                          or node.get("title")):
                     out.append({
                         "title": node.get("web_title") or node.get("title"),
-                        "summary": node.get("web_subtitle")
-                        or node.get("subtitle") or "",
+                        "summary": (node.get("web_subtitle")
+                                    or node.get("subtitle") or "")[:300],
                         "link": "https://vc.traded.co/p/" + node["slug"],
                         "date": (node.get("publish_date")
-                                 or node.get("displayed_date") or ""),
+                                 or node.get("displayed_date") or "")[:10],
                     })
                 for v in node.values():
                     walk(v)
@@ -76,47 +136,39 @@ def _tradedvc_from_next_data(html: str) -> list:
         walk(data)
     except Exception:
         return []
-    seen, uniq = set(), []
-    for p in out:
-        if p["link"] not in seen:
-            seen.add(p["link"])
-            uniq.append(p)
-    return uniq
-
-
-def _tradedvc_from_anchors(html: str) -> list:
-    out, seen = [], set()
-    for m in re.finditer(
-            r'href="(https://vc\.traded\.co/p/[^"]+|/p/[^"]+)"[^>]*>'
-            r'\s*([^<][^<]{15,400}?)\s*<', html):
-        link, text = m.group(1), re.sub(r"\s+", " ", m.group(2)).strip()
-        if link.startswith("/p/"):
-            link = "https://vc.traded.co" + link
-        if link in seen or len(text) < 20:
-            continue
-        seen.add(link)
-        out.append({"title": text, "summary": "", "link": link, "date": ""})
     return out
 
 
 @st.cache_data(ttl=900, show_spinner=False, max_entries=2)
-def fetch_tradedvc(pages: int = 4) -> list:
-    posts, seen = [], set()
+def fetch_tradedvc(pages: int = 10):
+    """Full TradedVC archive. Returns (posts, diagnostics)."""
+    posts, seen, diag = [], set(), []
+    sess = requests.Session()
+    sess.headers.update(BROWSER_HEADERS)
     for page in range(1, pages + 1):
         try:
-            r = requests.get(f"https://vc.traded.co/archive?page={page}",
-                             headers=UA, timeout=12)
+            r = sess.get(f"https://vc.traded.co/archive?page={page}",
+                         timeout=15)
             if r.status_code != 200:
+                diag.append(f"p{page}:HTTP{r.status_code}")
+                if r.status_code in (403, 429):
+                    break
                 continue
             batch = (_tradedvc_from_next_data(r.text)
                      or _tradedvc_from_anchors(r.text))
+            if not batch:
+                diag.append(f"p{page}:0 parsed")
+            new = 0
             for p in batch:
                 if p["link"] not in seen:
                     seen.add(p["link"])
                     posts.append(p)
-        except Exception:
-            continue
-    return posts
+                    new += 1
+            if new == 0 and page > 1:
+                break  # past the end of the archive
+        except Exception as e:
+            diag.append(f"p{page}:{type(e).__name__}")
+    return posts, "; ".join(diag[:6])
 
 
 # ---------- VC Corner: Substack archive API ----------

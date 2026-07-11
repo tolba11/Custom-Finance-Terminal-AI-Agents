@@ -64,15 +64,18 @@ with tab_traded:
                 '<span class="tt-func-desc">Venture capital raises and '
                 'dealflow digests — full archive, newest first. Source: '
                 'vc.traded.co</span></div>', unsafe_allow_html=True)
-    posts = fetch_tradedvc()
+    posts, diag = fetch_tradedvc()
     if posts:
-        st.caption(f"{len(posts)} archive issues")
+        st.caption(f"{len(posts)} archive issues — full archive, "
+                   f"refreshed every 15 minutes")
         for p in posts:
             row(p["title"], (p["date"] or "TRADEDVC").upper()[:24],
                 p["link"], p["summary"][:220])
     else:
         st.warning("Archive unavailable right now — it retries on the "
                    "next 15-minute refresh.")
+        if diag:
+            st.caption(f"Diagnostics: {diag}")
         st.link_button("Open TradedVC", "https://vc.traded.co/")
 
 with tab_corner:
