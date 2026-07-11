@@ -14,6 +14,7 @@ pages = [
     st.Page("views/portfolio_view.py", title="Portfolio"),
     st.Page("views/news_view.py", title="News"),
     st.Page("views/events.py", title="Events & Insiders"),
+    st.Page("views/pevc.py", title="PE/VC"),
     st.Page("views/compound_ai.py", title="Compound AI"),
     st.Page("views/perceptis_ai.py", title="Perceptis AI"),
 ]
