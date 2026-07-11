@@ -182,3 +182,12 @@ def apply_base_style(st):
 
 def get_alpha_vantage_key():
     return _get_key("ALPHA_VANTAGE_API_KEY")
+
+
+def get_perplexity_key():
+    return _get_key("PERPLEXITY_API_KEY")
+
+
+def get_perplexity_search_key():
+    return _get_key("PERPLEXITY_SEARCH_API_KEY") or _get_key(
+        "PERPLEXITY_API_KEY")

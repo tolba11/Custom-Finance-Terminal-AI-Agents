@@ -6,6 +6,7 @@ st.set_page_config(page_title="Tolba Terminal", layout="wide",
 
 pages = [
     st.Page("views/home.py", title="Home", default=True),
+    st.Page("views/deep_finance.py", title="Deep Finance"),
     st.Page("views/market_pulse.py", title="Market Pulse"),
     st.Page("views/stock_analyzer.py", title="Stock Analyzer"),
     st.Page("views/equity_research.py", title="Equity Research"),
@@ -27,7 +28,7 @@ pg = st.navigation(pages)
 # Auto-refresh: rerun every 15 minutes so quotes, charts, and news stay
 # current without a manual reload. Paused on Equity Research so a long
 # agent run is never interrupted.
-if pg.title != "Equity Research":
+if pg.title not in ("Equity Research", "Deep Finance"):
     try:
         from streamlit_autorefresh import st_autorefresh
         st_autorefresh(interval=15 * 60 * 1000, key="tt_autorefresh")
