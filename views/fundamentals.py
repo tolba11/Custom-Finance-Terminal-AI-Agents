@@ -13,7 +13,7 @@ from lib.symbol_search import symbol_search
 
 apply_base_style(st)
 render_sidebar(st)
-st.title("Fundamental Analysis")
+st.title("Financial Statements")
 st.markdown('<div class="tt-subtitle">STATEMENTS · SEC FILINGS · '
             'EARNINGS CALLS — YAHOO FINANCE + ALPHA VANTAGE + EDGAR</div>',
             unsafe_allow_html=True)
@@ -181,7 +181,7 @@ elif section == "Earnings & Transcripts":
                 if len(d) >= 7:
                     y, mth = int(d[:4]), int(d[5:7])
                     quarters.append(f"{y}Q{(mth - 1) // 3 + 1}")
-            sel = st.selectbox("Quarter", quarters, key="fa_q")
+            sel = st.selectbox("Quarter", quarters, key="fa_quarter")
             if st.button("Load transcript", key="fa_tr_btn"):
                 data, terr = av.av_transcript(ticker, sel)
                 tr = (data or {}).get("transcript", [])
