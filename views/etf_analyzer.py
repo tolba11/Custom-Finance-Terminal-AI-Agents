@@ -10,6 +10,7 @@ from lib.logos import logo_img_html
 from lib.market_data import (PERIOD_MAP, get_etf_details, get_history,
                              get_quote, get_stock_fundamentals)
 from lib.risk import compute_risk_score
+from lib.symbol_search import symbol_search
 
 apply_base_style(st)
 render_sidebar(st)
@@ -17,7 +18,7 @@ st.title("ETF Analyzer")
 
 c1, c2 = st.columns([1, 3])
 with c1:
-    ticker = st.text_input("ETF ticker", value="SPY").strip().upper()
+    ticker = symbol_search("ETF ticker or fund name", "etf", "SPY")
 with c2:
     period = st.segmented_control("Period", list(PERIOD_MAP.keys()),
                                   default="1Y", key="etf_period") or "1Y"

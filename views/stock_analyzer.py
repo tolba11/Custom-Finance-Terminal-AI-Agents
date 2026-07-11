@@ -9,6 +9,7 @@ from lib.market_data import (PERIOD_MAP, get_history, get_quote,
                              get_stock_fundamentals)
 from lib.news import ticker_news, time_ago
 from lib.signals import at_a_glance, fundamental_score, technical_score
+from lib.symbol_search import symbol_search
 
 apply_base_style(st)
 render_sidebar(st)
@@ -16,7 +17,7 @@ st.title("Stock Analyzer")
 
 c1, c2 = st.columns([1, 3])
 with c1:
-    ticker = st.text_input("Ticker", value="AAPL").strip().upper()
+    ticker = symbol_search("Ticker or company", "sa", "AAPL")
 with c2:
     period = st.segmented_control("Period", list(PERIOD_MAP.keys()),
                                   default="1Y", key="sa_period") or "1Y"

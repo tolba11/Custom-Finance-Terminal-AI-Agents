@@ -7,6 +7,7 @@ import streamlit as st
 from lib import finnhub_data as fh
 from lib.config import apply_base_style, render_footer, render_sidebar
 from lib.logos import logo_img_html
+from lib.symbol_search import symbol_search
 
 apply_base_style(st)
 render_sidebar(st)
@@ -59,8 +60,8 @@ with st.expander("Upcoming IPOs (next 30 days)"):
 st.divider()
 
 # ---- Per-ticker: analyst trends + insiders ----
-ticker = st.text_input("Ticker for analyst & insider detail",
-                       value="AAPL").strip().upper()
+ticker = symbol_search("Ticker or company for analyst & insider detail",
+                       "ev", "AAPL")
 if ticker:
     c1, c2 = st.columns([1, 1])
 

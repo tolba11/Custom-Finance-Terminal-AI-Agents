@@ -4,6 +4,7 @@ import streamlit as st
 from lib.agents import STAGES, run_pipeline
 from lib.config import apply_base_style, get_anthropic_key, render_footer, \
     render_sidebar
+from lib.symbol_search import symbol_search
 
 apply_base_style(st)
 render_sidebar(st)
@@ -23,8 +24,8 @@ VERDICT_COLORS = {"BUY": "#047857", "HOLD": "#b45309", "SELL": "#b91c1c"}
 # ---- controls ----
 c1, c2, c3, c4 = st.columns([2, 2, 2, 1])
 with c1:
-    ticker = st.text_input("What equity would you like to analyze?",
-                           value="MSFT").strip().upper()
+    ticker = symbol_search("What equity would you like to analyze?",
+                           "er", "MSFT")
 with c2:
     depth = st.segmented_control("Research depth",
                                  ["Shallow", "Medium", "Deep"],

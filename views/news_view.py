@@ -4,6 +4,7 @@ import streamlit as st
 from lib.config import apply_base_style, render_footer, render_sidebar
 from lib.logos import logo_img_html
 from lib.news import market_news, ticker_news, time_ago
+from lib.symbol_search import symbol_search
 
 apply_base_style(st)
 render_sidebar(st)
@@ -32,7 +33,7 @@ tab1, tab2 = st.tabs(["Market headlines", "By ticker"])
 with tab1:
     render_items(market_news(limit=15))
 with tab2:
-    tk = st.text_input("Ticker", value="AAPL").strip().upper()
+    tk = symbol_search("Ticker or company", "news", "AAPL")
     if tk:
         st.markdown(f"{logo_img_html(tk, 32)} &nbsp;**{tk}**",
                     unsafe_allow_html=True)
