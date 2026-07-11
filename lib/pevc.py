@@ -142,13 +142,18 @@ def _tradedvc_from_next_data(html: str) -> list:
 @st.cache_data(ttl=900, show_spinner=False, max_entries=2)
 def fetch_tradedvc(pages: int = 10):
     """Full TradedVC archive. Returns (posts, diagnostics)."""
+    import time as _time
+    t0 = _time.time()
     posts, seen, diag = [], set(), []
     sess = requests.Session()
     sess.headers.update(BROWSER_HEADERS)
     for page in range(1, pages + 1):
+        if _time.time() - t0 > 40:
+            diag.append("time-budget hit")
+            break
         try:
             r = sess.get(f"https://vc.traded.co/archive?page={page}",
-                         timeout=15)
+                         timeout=10)
             if r.status_code != 200:
                 diag.append(f"p{page}:HTTP{r.status_code}")
                 if r.status_code in (403, 429):

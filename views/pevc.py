@@ -5,6 +5,14 @@ from lib.config import apply_base_style, render_footer, render_sidebar
 from lib.news import time_ago
 from lib.pevc import fetch_pe_deal_headlines, fetch_tradedvc, fetch_vccorner
 
+
+def _safe(fn, *args):
+    """Run a fetcher; never let one source crash the page."""
+    try:
+        return fn(*args), None
+    except Exception as e:
+        return None, f"{type(e).__name__}: {e}"
+
 apply_base_style(st)
 render_sidebar(st)
 st.title("PE / VC")
@@ -47,7 +55,10 @@ with tab_deals:
     st.link_button("Open PE News — Deals",
                    "https://www.penews.com/deals")
     st.divider()
-    items = fetch_pe_deal_headlines()
+    items, err = _safe(fetch_pe_deal_headlines)
+    if err:
+        st.error(f"Deals feed error — {err}")
+        items = None
     if items:
         for it in items:
             meta = " · ".join(x for x in (
@@ -64,7 +75,10 @@ with tab_traded:
                 '<span class="tt-func-desc">Venture capital raises and '
                 'dealflow digests — full archive, newest first. Source: '
                 'vc.traded.co</span></div>', unsafe_allow_html=True)
-    posts, diag = fetch_tradedvc()
+    res, err = _safe(fetch_tradedvc)
+    posts, diag = res if res else ([], err or "")
+    if err:
+        st.error(f"TradedVC error — {err}")
     if posts:
         st.caption(f"{len(posts)} archive issues — full archive, "
                    f"refreshed every 15 minutes")
@@ -86,7 +100,10 @@ with tab_corner:
                 'archive. Free posts open directly; subscriber posts are '
                 'marked and open on The VC Corner for access.</span>'
                 '</div>', unsafe_allow_html=True)
-    posts = fetch_vccorner()
+    posts, err = _safe(fetch_vccorner)
+    if err:
+        st.error(f"VC Corner error — {err}")
+        posts = None
     if posts:
         q = st.text_input("Filter the archive",
                           placeholder="e.g. angel investors, pitch deck, "

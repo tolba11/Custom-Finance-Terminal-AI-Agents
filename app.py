@@ -48,9 +48,10 @@ st.sidebar.markdown(
 
 try:
     pg.run()
-except Exception:
+except Exception as _e:
     st.error("This view hit a temporary problem — usually a rate-limited "
              "or briefly unavailable data source.")
+    st.caption(f"Detail: {type(_e).__name__}: {_e}")
     c1, c2 = st.columns([1, 5])
     with c1:
         if st.button("Retry"):
