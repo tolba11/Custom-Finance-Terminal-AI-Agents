@@ -25,19 +25,20 @@ for i, (tk, name) in enumerate(INDEX_TICKERS.items()):
             st.metric(name.upper(), "—")
 
 st.divider()
-st.markdown('<div class="tt-subtitle">FUNCTIONS</div>', unsafe_allow_html=True)
-c1, c2, c3 = st.columns(3)
-funcs = [("Market Pulse", "Indices, sectors, movers, headlines"),
-         ("Stock Analyzer", "Charts, factor scores, statistics, AI"),
-         ("ETF Analyzer", "Returns, risk, holdings, cost peers"),
-         ("Macro", "FRED indicators and yield curve"),
-         ("Portfolio", "Holdings, allocation, risk"),
-         ("Events & Insiders", "Earnings, IPOs, ratings, insiders")]
-for i, (fn, desc) in enumerate(funcs):
-    with (c1, c2, c3)[i % 3]:
-        st.markdown(
-            f'<div class="tt-func"><span class="tt-func-name">{fn}</span>'
-            f'<br><span class="tt-func-desc">{desc}</span></div>',
+st.markdown('<div class="tt-subtitle">FUNCTIONS</div>',
             unsafe_allow_html=True)
+from lib.registry import PAGES, url_path
+
+funcs = [(f, t, d) for f, t, d in PAGES if t != "Home"]
+st.caption(f"{len(funcs)} functions available")
+cols = st.columns(3)
+for i, (f, title, desc) in enumerate(funcs):
+    with cols[i % 3]:
+        st.markdown(
+            f'<a href="{url_path(f)}" target="_self" '
+            f'style="text-decoration:none;">'
+            f'<div class="tt-func"><span class="tt-func-name">{title}'
+            f'</span><br><span class="tt-func-desc">{desc}</span>'
+            f'</div></a>', unsafe_allow_html=True)
 
 render_footer(st)

@@ -4,24 +4,10 @@ import streamlit as st
 st.set_page_config(page_title="Tolba Terminal", layout="wide",
                    initial_sidebar_state="expanded")
 
-pages = [
-    st.Page("views/home.py", title="Home", default=True),
-    st.Page("views/deep_finance.py", title="Deep Finance"),
-    st.Page("views/market_pulse.py", title="Market Pulse"),
-    st.Page("views/stock_analyzer.py", title="Stock Analyzer"),
-    st.Page("views/equity_research.py", title="Equity Research"),
-    st.Page("views/fundamentals.py", title="Financial Statements"),
-    st.Page("views/etf_analyzer.py", title="ETF Analyzer"),
-    st.Page("views/macro.py", title="Macro"),
-    st.Page("views/portfolio_view.py", title="Portfolio"),
-    st.Page("views/news_view.py", title="News"),
-    st.Page("views/events.py", title="Events & Insiders"),
-    st.Page("views/pevc.py", title="PE/VC"),
-    st.Page("views/technology.py", title="Technology"),
-    st.Page("views/compound_ai.py", title="Compound AI"),
-    st.Page("views/perceptis_ai.py", title="Perceptis AI"),
-    st.Page("views/pretus_ai.py", title="Pretus AI"),
-]
+from lib.registry import PAGES
+
+pages = [st.Page(f, title=t, default=(t == "Home"))
+         for f, t, _ in PAGES]
 
 pg = st.navigation(pages)
 
