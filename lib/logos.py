@@ -85,15 +85,48 @@ def get_logo_data_url(ticker: str) -> str:
     return ""
 
 
-def logo_img_html(ticker: str, size: int = 28) -> str:
-    """<img> tag for the ticker logo, or a neutral placeholder circle."""
-    url = get_logo_data_url(ticker)
-    if url:
-        return (f'<img src="{url}" width="{size}" height="{size}" '
-                f'style="border-radius:6px;object-fit:contain;'
-                f'vertical-align:middle;background:#f4f4f5;padding:2px;"/>')
+def _letter_uri(ticker: str, size: int) -> str:
+    """Data-URI SVG letter chip — final fallback, always renders."""
+    from urllib.parse import quote
     letter = (ticker or "?")[0].upper()
-    return (f'<span style="display:inline-flex;width:{size}px;height:{size}px;'
-            f'border-radius:6px;background:#e4e4e7;color:#3f3f46;'
-            f'align-items:center;justify-content:center;font-size:{size//2}px;'
-            f'vertical-align:middle;">{letter}</span>')
+    svg = (f"<svg xmlns='http://www.w3.org/2000/svg' width='{size}' "
+           f"height='{size}'><rect width='100%' height='100%' rx='6' "
+           f"fill='#e4e4e7'/><text x='50%' y='55%' "
+           f"dominant-baseline='middle' text-anchor='middle' "
+           f"font-family='Arial,sans-serif' font-weight='600' "
+           f"font-size='{int(size * 0.5)}' fill='#3f3f46'>{letter}</text>"
+           f"</svg>")
+    return "data:image/svg+xml;utf8," + quote(svg)
+
+
+def _clean_domain(domain: str) -> str:
+    if not domain:
+        return ""
+    d = domain.split("//")[-1].split("/")[0].strip()
+    return d[4:] if d.startswith("www.") else d
+
+
+def logo_img_html(ticker: str, size: int = 28, domain: str = None) -> str:
+    """Company logo <img> with a browser-side fallback chain:
+    local asset -> symbol logo CDN / domain favicon -> letter chip."""
+    tk = (ticker or "").upper().replace("/", "-")
+    style = (f'width:{size}px;height:{size}px;border-radius:6px;'
+             f'object-fit:contain;vertical-align:middle;'
+             f'background:#f4f4f5;padding:2px;flex-shrink:0;')
+    local = get_logo_data_url(tk)
+    letter = _letter_uri(tk, size)
+    if local:
+        primary, fallback = local, letter
+    else:
+        dom = _clean_domain(domain) or TICKER_DOMAINS.get(tk, "")
+        if dom:
+            primary = ("https://t3.gstatic.com/faviconV2?client=SOCIAL"
+                       "&type=FAVICON&fallback_opts=TYPE,SIZE,URL"
+                       f"&url=https://{dom}&size=128")
+            fallback = f"https://assets.parqet.com/logos/symbol/{tk}?format=png"
+        else:
+            primary = f"https://assets.parqet.com/logos/symbol/{tk}?format=png"
+            fallback = letter
+    return (f'<img src="{primary}" style="{style}" loading="lazy" '
+            f"onerror=\"this.onerror=function(){{this.onerror=null;"
+            f"this.src='{letter}';}};this.src='{fallback}';\"/>")

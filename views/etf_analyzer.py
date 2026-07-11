@@ -39,7 +39,8 @@ if df.empty and not info:
 name = info.get("longName") or info.get("shortName") or ticker
 st.markdown(
     f'<div style="display:flex;align-items:center;gap:14px;">'
-    f'{logo_img_html(ticker, 56)}<div><h2 style="margin:0;">{name} '
+    f'{logo_img_html(ticker, 56, domain=info.get("website"))}'
+    f'<div><h2 style="margin:0;">{name} '
     f'<span style="color:#71717a;font-size:0.7em;">{ticker}</span></h2>'
     f'</div></div>', unsafe_allow_html=True)
 

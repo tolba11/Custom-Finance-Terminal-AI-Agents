@@ -40,7 +40,8 @@ sector = " · ".join(x for x in (info.get("sector"),
                                 info.get("industry")) if x)
 st.markdown(
     f'<div style="display:flex;align-items:center;gap:14px;">'
-    f'{logo_img_html(ticker, 64)}<div><h2 style="margin:0;">{name} '
+    f'{logo_img_html(ticker, 64, domain=info.get("website"))}'
+    f'<div><h2 style="margin:0;">{name} '
     f'<span style="color:#71717a;font-size:0.7em;">{ticker}</span></h2>'
     f'<span style="color:#71717a;">{sector}</span></div></div>',
     unsafe_allow_html=True)
