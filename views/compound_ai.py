@@ -4,7 +4,7 @@ import streamlit.components.v1 as components
 
 from lib.config import apply_base_style, render_footer, render_sidebar
 
-COMPOUND_URL = "https://app.getcompound.ai"
+COMPOUND_URL = "https://getcompound.ai/login"
 
 apply_base_style(st)
 render_sidebar(st)
@@ -57,8 +57,8 @@ mode = st.segmented_control("Workspace", ["Embedded", "Hidden"],
 if mode == "Embedded":
     components.iframe(COMPOUND_URL, height=920, scrolling=True)
     st.caption(
-        "If the panel above stays blank, Compound blocks in-page embedding "
-        "for security (many finance platforms do). Use the new-tab button "
-        "instead — the workflow is identical.")
+        "If the panel stays blank or login loops, Compound (or its SSO "
+        "provider) blocks running inside another page — use the new-tab "
+        "button; your browser keeps you signed in there.")
 
 render_footer(st)
