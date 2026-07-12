@@ -118,14 +118,14 @@ def logo_img_html(ticker: str, size: int = 28, domain: str = None) -> str:
     if local:
         primary, fallback = local, letter
     else:
+        # High-res brand mark first; tiny upscaled favicons only as backup.
+        primary = f"https://assets.parqet.com/logos/symbol/{tk}?format=png"
         dom = _clean_domain(domain) or TICKER_DOMAINS.get(tk, "")
         if dom:
-            primary = ("https://t3.gstatic.com/faviconV2?client=SOCIAL"
-                       "&type=FAVICON&fallback_opts=TYPE,SIZE,URL"
-                       f"&url=https://{dom}&size=128")
-            fallback = f"https://assets.parqet.com/logos/symbol/{tk}?format=png"
+            fallback = ("https://t3.gstatic.com/faviconV2?client=SOCIAL"
+                        "&type=FAVICON&fallback_opts=TYPE,SIZE,URL"
+                        f"&url=https://{dom}&size=128")
         else:
-            primary = f"https://assets.parqet.com/logos/symbol/{tk}?format=png"
             fallback = letter
     return (f'<img src="{primary}" style="{style}" loading="lazy" '
             f"onerror=\"this.onerror=function(){{this.onerror=null;"
