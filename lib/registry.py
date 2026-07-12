@@ -21,7 +21,7 @@ PAGES = [
     ("views/macro.py", "Macro",
      "FRED indicators, yield curve, commodities"),
     ("views/portfolio_view.py", "Portfolio",
-     "Performance vs SPY, exposures, correlation, risk"),
+     "Performance, attribution, exposures, risk decomposition"),
     ("views/news_view.py", "News",
      "Market and per-ticker headlines"),
     ("views/events.py", "Events & Insiders",
