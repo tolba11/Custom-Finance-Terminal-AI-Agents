@@ -76,9 +76,10 @@ def symbol_search(label: str, key: str, default: str,
 
     region = "All"
     if region_filter:
-        region = st.segmented_control(
-            "Region", ["All", "U.S.", "Europe", "APAC"],
+        _r = st.segmented_control(
+            "Region", ["All", "US", "EU", "APAC"],
             default="All", key=f"{key}_region") or "All"
+        region = {"US": "U.S.", "EU": "Europe"}.get(_r, _r)
 
     if q and q.strip():
         matches = search_symbols(q.strip())
