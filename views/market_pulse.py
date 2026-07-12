@@ -6,24 +6,33 @@ import yfinance as yf
 from lib.charts import CHART_VIEWS, render_price_chart, render_sparkline
 from lib.config import apply_base_style, render_footer, render_sidebar
 from lib.logos import logo_img_html
-from lib.market_data import (INDEX_TICKERS, SECTOR_ETFS, PERIOD_MAP,
+from lib.market_data import (INDEX_TICKERS, REGION_BENCHMARK,
+                             REGION_TICKERS, SECTOR_ETFS, PERIOD_MAP,
                              get_history, get_history_bulk,
                              get_history_fresh, get_quotes_bulk)
 from lib.news import market_news, time_ago
 
 apply_base_style(st)
 render_sidebar(st)
-st.title("Market Pulse")
+t_l, t_r = st.columns([3, 1.6])
+with t_l:
+    st.title("Market Pulse")
+with t_r:
+    st.markdown("<div style='height:0.9rem'></div>", unsafe_allow_html=True)
+    region = st.segmented_control("Region", list(REGION_TICKERS.keys()),
+                                  default="U.S.",
+                                  key="mp_region") or "U.S."
 
 period = st.segmented_control("Period", list(PERIOD_MAP.keys()),
                               default="1D", key="mp_period") or "1D"
 
 # ---- Index / asset cards with sparklines ----
-tickers = tuple(INDEX_TICKERS.keys())
+region_map = REGION_TICKERS[region]
+tickers = tuple(region_map.keys())
 quotes = get_quotes_bulk(tickers)
 hist = get_history_bulk(tickers, period)
 
-rows = [list(INDEX_TICKERS.items())[:5], list(INDEX_TICKERS.items())[5:]]
+rows = [list(region_map.items())[:5], list(region_map.items())[5:]]
 for row in rows:
     cols = st.columns(len(row))
     for col, (tk, name) in zip(cols, row):
@@ -50,11 +59,12 @@ for row in rows:
 st.divider()
 
 # ---- Big S&P 500 chart ----
-st.subheader("S&P 500 (^GSPC)")
+bench_tk, bench_name = REGION_BENCHMARK[region]
+st.subheader(f"{bench_name} ({bench_tk})")
 view = st.segmented_control("View", CHART_VIEWS, default="Performance",
                             key="mp_view") or "Performance"
-spx, spx_fresh = get_history_fresh("^GSPC", period)
-spx_baseline = (quotes.get("^GSPC", {}).get("prev_close")
+spx, spx_fresh = get_history_fresh(bench_tk, period)
+spx_baseline = (quotes.get(bench_tk, {}).get("prev_close")
                 if period == "1D" else None)
 st.plotly_chart(render_price_chart(spx, view=view,
                                    baseline_price=spx_baseline),
@@ -67,38 +77,15 @@ if spx_fresh:
 
 st.divider()
 
-# ---- Sector heatmap ----
-st.subheader("Sector performance")
-sector_hist = get_history_bulk(tuple(SECTOR_ETFS.keys()), period)
-sector_quotes = get_quotes_bulk(tuple(SECTOR_ETFS.keys()))
-perf = {}
-for tk, name in SECTOR_ETFS.items():
-    df = sector_hist.get(tk)
-    if df is None or df.empty:
-        continue
-    if period == "1D":
-        base = sector_quotes.get(tk, {}).get("prev_close") or float(
-            df["Close"].iloc[0])
-    else:
-        base = float(df["Close"].iloc[0])
-    perf[name] = (float(df["Close"].iloc[-1]) / base - 1) * 100
-if perf:
-    import plotly.graph_objects as go
-    s = pd.Series(perf).sort_values()
-    fig = go.Figure(go.Bar(
-        x=s.values, y=s.index, orientation="h",
-        marker_color=["#22c55e" if v >= 0 else "#ef4444" for v in s.values],
-        text=[f"{v:+.2f}%" for v in s.values], textposition="outside",
-    ))
-    fig.update_layout(template="plotly_white", height=420,
-                      margin=dict(l=10, r=60, t=10, b=10),
-                      xaxis_ticksuffix="%", paper_bgcolor="rgba(0,0,0,0)")
-    st.plotly_chart(fig, use_container_width=True)
+# ---- Global markets: commodities, FX, rates & bonds ----
+st.subheader("Commodities · FX · Rates")
+from lib.markets_strip import render_markets_strip
+render_markets_strip()
 
 st.divider()
 
 
-# ---- Gainers / losers / most active ----
+# ---- U.S.-only sections: sector heatmap + movers ----
 @st.cache_data(ttl=300, show_spinner=False)
 def get_movers():
     out = {}
@@ -141,17 +128,54 @@ def render_mover_rows(items):
                         f'{logo_img_html(sym, 22)} <b>{sym}</b></div>',
                         unsafe_allow_html=True)
 
-movers = get_movers()
-c1, c2, c3 = st.columns(3)
-with c1:
-    st.subheader("Top gainers")
-    render_mover_rows(movers["gainers"])
-with c2:
-    st.subheader("Top losers")
-    render_mover_rows(movers["losers"])
-with c3:
-    st.subheader("Most active")
-    render_mover_rows(movers["active"])
+
+if region == "U.S.":
+    st.subheader("Sector performance")
+    sector_hist = get_history_bulk(tuple(SECTOR_ETFS.keys()), period)
+    sector_quotes = get_quotes_bulk(tuple(SECTOR_ETFS.keys()))
+    perf = {}
+    for tk, name in SECTOR_ETFS.items():
+        df = sector_hist.get(tk)
+        if df is None or df.empty:
+            continue
+        if period == "1D":
+            base = sector_quotes.get(tk, {}).get("prev_close") or float(
+                df["Close"].iloc[0])
+        else:
+            base = float(df["Close"].iloc[0])
+        perf[name] = (float(df["Close"].iloc[-1]) / base - 1) * 100
+    if perf:
+        import plotly.graph_objects as go
+        s = pd.Series(perf).sort_values()
+        fig = go.Figure(go.Bar(
+            x=s.values, y=s.index, orientation="h",
+            marker_color=["#047857" if v >= 0 else "#b91c1c"
+                          for v in s.values],
+            text=[f"{v:+.2f}%" for v in s.values],
+            textposition="outside",
+        ))
+        fig.update_layout(template="plotly_white", height=420,
+                          margin=dict(l=10, r=60, t=10, b=10),
+                          xaxis_ticksuffix="%",
+                          paper_bgcolor="rgba(0,0,0,0)")
+        st.plotly_chart(fig, use_container_width=True)
+
+    st.divider()
+
+    movers = get_movers()
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        st.subheader("Top gainers")
+        render_mover_rows(movers["gainers"])
+    with c2:
+        st.subheader("Top losers")
+        render_mover_rows(movers["losers"])
+    with c3:
+        st.subheader("Most active")
+        render_mover_rows(movers["active"])
+else:
+    st.caption("Sector heatmap and top movers cover U.S. markets — "
+               "switch the region to U.S. to view them.")
 
 st.divider()
 

@@ -18,7 +18,8 @@ st.title("Stock Analyzer")
 
 c1, c2 = st.columns([1, 3])
 with c1:
-    ticker = symbol_search("Ticker or company", "sa", "AAPL")
+    ticker = symbol_search("Ticker or company", "sa", "AAPL",
+                       region_filter=True)
 with c2:
     period = st.segmented_control("Period", list(PERIOD_MAP.keys()),
                                   default="1Y", key="sa_period") or "1Y"

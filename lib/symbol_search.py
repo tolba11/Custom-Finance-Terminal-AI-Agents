@@ -7,6 +7,23 @@ from lib.config import get_finnhub_key
 _TYPES = {"EQUITY": "Stock", "ETF": "ETF", "INDEX": "Index",
           "MUTUALFUND": "Fund", "CRYPTOCURRENCY": "Crypto"}
 
+_EU_SUFFIX = {"L", "DE", "F", "PA", "AS", "MI", "SW", "MC", "BR", "LS",
+              "VI", "ST", "OL", "CO", "HE", "IR", "WA", "PR", "AT"}
+_APAC_SUFFIX = {"T", "HK", "SS", "SZ", "AX", "KS", "KQ", "TW", "TWO",
+                "NS", "BO", "SI", "KL", "BK", "JK", "NZ"}
+
+
+def symbol_region(symbol: str) -> str:
+    """Classify a Yahoo symbol by its exchange suffix."""
+    if "." in symbol:
+        suffix = symbol.rsplit(".", 1)[-1].upper()
+        if suffix in _EU_SUFFIX:
+            return "Europe"
+        if suffix in _APAC_SUFFIX:
+            return "APAC"
+        return "Other"
+    return "U.S."
+
 
 @st.cache_data(ttl=900, show_spinner=False, max_entries=256)
 def search_symbols(q: str) -> list:
@@ -15,7 +32,7 @@ def search_symbols(q: str) -> list:
     try:
         r = requests.get(
             "https://query2.finance.yahoo.com/v1/finance/search",
-            params={"q": q, "quotesCount": 8, "newsCount": 0},
+            params={"q": q, "quotesCount": 12, "newsCount": 0},
             headers={"User-Agent": "Mozilla/5.0"}, timeout=8)
         for it in r.json().get("quotes", []):
             qt = it.get("quoteType")
@@ -43,9 +60,12 @@ def search_symbols(q: str) -> list:
     return out
 
 
-def symbol_search(label: str, key: str, default: str) -> str:
+def symbol_search(label: str, key: str, default: str,
+                  region_filter: bool = False) -> str:
     """Search box + suggestion dropdown. Returns the selected symbol.
-    The selection persists in session state across reruns/refreshes."""
+    The selection persists in session state across reruns/refreshes.
+    With region_filter=True, matches can be narrowed to U.S. / Europe /
+    APAC listings."""
     sel_key = f"{key}_symbol"
     if sel_key not in st.session_state:
         st.session_state[sel_key] = default
@@ -54,8 +74,20 @@ def symbol_search(label: str, key: str, default: str) -> str:
         label, key=f"{key}_q",
         placeholder="Ticker or company name — press Enter to search")
 
+    region = "All"
+    if region_filter:
+        region = st.segmented_control(
+            "Region", ["All", "U.S.", "Europe", "APAC"],
+            default="All", key=f"{key}_region") or "All"
+
     if q and q.strip():
         matches = search_symbols(q.strip())
+        if region != "All":
+            matches = [m for m in matches
+                       if symbol_region(m["symbol"]) == region]
+            if not matches:
+                st.caption(f"No {region} listings matched — clear the "
+                           "region filter to see all matches.")
         if matches:
             syms = [m["symbol"] for m in matches]
             fmt = {m["symbol"]:

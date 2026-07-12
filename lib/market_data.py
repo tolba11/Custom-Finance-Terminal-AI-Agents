@@ -223,3 +223,40 @@ def get_history_fresh(ticker: str, period_label: str):
             note = (f"DATA THROUGH {now.strftime('%Y-%m-%d %H:%M')} ET "
                     f"(LIVE QUOTE SPLICED)")
     return df, note
+
+
+# ---- Regional market boards (Market Pulse) ----
+
+REGION_TICKERS = {
+    "U.S.": INDEX_TICKERS,
+    "Europe": {
+        "^STOXX50E": "Euro Stoxx 50",
+        "^FTSE": "FTSE 100",
+        "^GDAXI": "DAX",
+        "^FCHI": "CAC 40",
+        "^IBEX": "IBEX 35",
+        "^SSMI": "Swiss SMI",
+        "^AEX": "AEX",
+        "FTSEMIB.MI": "FTSE MIB",
+        "EURUSD=X": "EUR/USD",
+        "GBPUSD=X": "GBP/USD",
+    },
+    "APAC": {
+        "^N225": "Nikkei 225",
+        "^HSI": "Hang Seng",
+        "000001.SS": "Shanghai Comp.",
+        "^AXJO": "ASX 200",
+        "^KS11": "KOSPI",
+        "^TWII": "Taiwan Weighted",
+        "^NSEI": "Nifty 50",
+        "^STI": "Straits Times",
+        "USDJPY=X": "USD/JPY",
+        "AUDUSD=X": "AUD/USD",
+    },
+}
+
+REGION_BENCHMARK = {
+    "U.S.": ("^GSPC", "S&P 500"),
+    "Europe": ("^STOXX50E", "Euro Stoxx 50"),
+    "APAC": ("^N225", "Nikkei 225"),
+}
