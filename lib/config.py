@@ -174,6 +174,128 @@ def apply_base_style(st):
             text-transform: uppercase; font-size: 0.8rem;
             letter-spacing: 0.05em;
         }
+        
+        /* ===== control chrome: terminal-grade ===== */
+        /* tabs: flat list, orange active underline */
+        div[data-baseweb="tab-list"] {
+            gap: 0; border-bottom: 2px solid #e4e4e7;
+            background: transparent;
+        }
+        button[data-baseweb="tab"] {
+            font-family: 'IBM Plex Mono', 'Consolas', 'Liberation Mono', 'DejaVu Sans Mono', monospace !important;
+            text-transform: uppercase; letter-spacing: 0.07em;
+            font-size: 0.78rem !important; font-weight: 600;
+            color: #71717a; background: transparent !important;
+            border-radius: 0 !important; padding: 0.55rem 1.1rem;
+            margin-bottom: -2px; border-bottom: 3px solid transparent;
+        }
+        button[data-baseweb="tab"]:hover { color: #18181b; background: #f7f7f5 !important; }
+        button[data-baseweb="tab"][aria-selected="true"] {
+            color: #c2410c !important; border-bottom: 3px solid #c2410c;
+        }
+        div[data-baseweb="tab-highlight"], div[data-baseweb="tab-border"] { display: none; }
+        button[data-baseweb="tab"] p { font-size: 0.78rem !important; font-weight: 600; }
+
+        /* buttons: square, mono, orange hover fill */
+        .stButton > button, .stDownloadButton > button,
+        [data-testid^="stBaseButton-secondary"], [data-testid^="stBaseButton-primary"] {
+            font-family: 'IBM Plex Mono', 'Consolas', 'Liberation Mono', 'DejaVu Sans Mono', monospace !important;
+            text-transform: uppercase; letter-spacing: 0.08em;
+            font-size: 0.75rem !important; font-weight: 600;
+            border-radius: 0 !important; border: 1px solid #18181b !important;
+            color: #18181b; background: #ffffff;
+            padding: 0.35rem 1.1rem; transition: all .12s ease;
+        }
+        .stButton > button:hover, .stDownloadButton > button:hover {
+            background: #c2410c !important; border-color: #c2410c !important;
+            color: #ffffff !important;
+        }
+        .stButton > button:focus:not(:active) { border-color: #c2410c !important; color: #c2410c; }
+
+        /* segmented control: joined square group, orange active */
+        [data-testid="stSegmentedControl"] button,
+        [data-testid="stButtonGroup"] button {
+            font-family: 'IBM Plex Mono', 'Consolas', 'Liberation Mono', 'DejaVu Sans Mono', monospace !important;
+            font-size: 0.74rem !important; font-weight: 600;
+            letter-spacing: 0.05em; border-radius: 0 !important;
+            border: 1px solid #d4d4d8 !important; margin-left: -1px;
+            color: #52525b; background: #ffffff; padding: 0.25rem 0.8rem;
+        }
+        [data-testid="stSegmentedControl"] button:hover,
+        [data-testid="stButtonGroup"] button:hover { background: #f7f7f5; color: #18181b; }
+        [data-testid="stSegmentedControl"] button[aria-checked="true"],
+        [data-testid="stSegmentedControl"] button[kind="segmented_controlActive"],
+        [data-testid="stButtonGroup"] button[aria-checked="true"],
+        [data-testid^="stBaseButton-segmented_controlActive"] {
+            background: #18181b !important; color: #ffffff !important;
+            border-color: #18181b !important;
+        }
+
+        /* inputs + selects: square, mono, orange focus */
+        [data-baseweb="input"], [data-baseweb="base-input"],
+        [data-baseweb="select"] > div, .stTextInput input, .stNumberInput input {
+            border-radius: 0 !important;
+            font-family: 'IBM Plex Mono', 'Consolas', 'Liberation Mono', 'DejaVu Sans Mono', monospace !important;
+            font-size: 0.85rem !important;
+        }
+        [data-baseweb="input"]:focus-within, [data-baseweb="select"] > div:focus-within {
+            border-color: #c2410c !important; box-shadow: none !important;
+        }
+        [data-baseweb="popover"] li {
+            font-family: 'IBM Plex Mono', 'Consolas', 'Liberation Mono', 'DejaVu Sans Mono', monospace !important;
+            font-size: 0.82rem !important;
+        }
+        .stTextInput label, .stSelectbox label, .stNumberInput label,
+        [data-testid="stWidgetLabel"] p {
+            font-family: 'IBM Plex Mono', 'Consolas', 'Liberation Mono', 'DejaVu Sans Mono', monospace !important;
+            text-transform: uppercase; letter-spacing: 0.07em;
+            font-size: 0.68rem !important; color: #71717a !important;
+        }
+
+        /* expanders: bordered square panels, mono header */
+        [data-testid="stExpander"] {
+            border: 1px solid #e4e4e7 !important; border-radius: 0 !important;
+            background: #ffffff;
+        }
+        [data-testid="stExpander"] summary {
+            font-family: 'IBM Plex Mono', 'Consolas', 'Liberation Mono', 'DejaVu Sans Mono', monospace !important;
+            text-transform: uppercase; letter-spacing: 0.07em;
+            font-size: 0.75rem !important; font-weight: 600;
+        }
+        [data-testid="stExpander"] summary:hover { color: #c2410c !important; }
+
+        /* alerts: square, accent bar */
+        [data-testid="stAlert"] {
+            border-radius: 0 !important; border: 1px solid #e4e4e7;
+            border-left: 3px solid #c2410c;
+            font-size: 0.85rem;
+        }
+
+        /* dividers tighter, captions mono */
+        hr { border-color: #e4e4e7 !important; margin: 0.8rem 0 !important; }
+        [data-testid="stCaptionContainer"] p {
+            font-family: 'IBM Plex Mono', 'Consolas', 'Liberation Mono', 'DejaVu Sans Mono', monospace !important;
+            font-size: 0.68rem !important; letter-spacing: 0.04em;
+            color: #a1a1aa !important;
+        }
+
+        /* chat input square */
+        [data-testid="stChatInput"] { border-radius: 0 !important; }
+        [data-testid="stChatInput"] textarea {
+            font-family: 'IBM Plex Mono', 'Consolas', 'Liberation Mono', 'DejaVu Sans Mono', monospace !important;
+        }
+
+        /* plotly: hide floating toolbar for a cleaner board */
+        .modebar { display: none !important; }
+
+        /* sidebar nav: active page orange marker */
+        [data-testid="stSidebarNav"] a {
+            border-radius: 0 !important; border-left: 3px solid transparent;
+        }
+        [data-testid="stSidebarNav"] a:hover { border-left: 3px solid #d4d4d8; }
+        [data-testid="stSidebarNav"] a[aria-current="page"] {
+            border-left: 3px solid #c2410c; background: #ffffff !important;
+        }
         </style>
         """,
         unsafe_allow_html=True,
