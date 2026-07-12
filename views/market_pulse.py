@@ -7,7 +7,8 @@ from lib.charts import CHART_VIEWS, render_price_chart, render_sparkline
 from lib.config import apply_base_style, render_footer, render_sidebar
 from lib.logos import logo_img_html
 from lib.market_data import (INDEX_TICKERS, SECTOR_ETFS, PERIOD_MAP,
-                             get_history, get_history_bulk, get_quotes_bulk)
+                             get_history, get_history_bulk,
+                             get_history_fresh, get_quotes_bulk)
 from lib.news import market_news, time_ago
 
 apply_base_style(st)
@@ -52,12 +53,17 @@ st.divider()
 st.subheader("S&P 500 (^GSPC)")
 view = st.segmented_control("View", CHART_VIEWS, default="Performance",
                             key="mp_view") or "Performance"
-spx = get_history("^GSPC", period)
+spx, spx_fresh = get_history_fresh("^GSPC", period)
 spx_baseline = (quotes.get("^GSPC", {}).get("prev_close")
                 if period == "1D" else None)
 st.plotly_chart(render_price_chart(spx, view=view,
                                    baseline_price=spx_baseline),
                 use_container_width=True)
+if spx_fresh:
+    st.markdown(f'<div style="font-family:Consolas,monospace;'
+                f'font-size:0.68rem;letter-spacing:0.08em;color:#a1a1aa;">'
+                f'{spx_fresh} · REFRESHES EVERY 15 MIN</div>',
+                unsafe_allow_html=True)
 
 st.divider()
 

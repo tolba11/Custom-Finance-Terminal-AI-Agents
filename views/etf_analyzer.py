@@ -8,7 +8,8 @@ from lib.config import apply_base_style, render_footer, render_sidebar
 from lib.etf_peers import find_peers
 from lib.logos import logo_img_html
 from lib.market_data import (PERIOD_MAP, get_etf_details, get_history,
-                             get_quote, get_stock_fundamentals)
+                             get_history_fresh, get_quote,
+                             get_stock_fundamentals)
 from lib.risk import compute_risk_score
 from lib.symbol_search import symbol_search
 
@@ -29,7 +30,7 @@ if not ticker:
 details = get_etf_details(ticker)
 info = details["info"]
 quote = get_quote(ticker)
-df = get_history(ticker, period)
+df, freshness = get_history_fresh(ticker, period)
 
 if df.empty and not info:
     st.warning(f"No data found for **{ticker}**.")
@@ -61,6 +62,11 @@ view = st.segmented_control("View", CHART_VIEWS, default="Performance",
 baseline = quote.get("prev_close") if period == "1D" else None
 st.plotly_chart(render_price_chart(df, view=view, baseline_price=baseline),
                 use_container_width=True)
+if freshness:
+    st.markdown(f'<div style="font-family:Consolas,monospace;'
+                f'font-size:0.68rem;letter-spacing:0.08em;color:#a1a1aa;">'
+                f'{freshness} · REFRESHES EVERY 15 MIN</div>',
+                unsafe_allow_html=True)
 
 # ---- Returns table + risk gauge ----
 st.divider()

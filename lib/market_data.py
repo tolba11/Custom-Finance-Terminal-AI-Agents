@@ -188,3 +188,38 @@ def get_etf_details(ticker: str) -> dict:
 def is_etf(ticker: str) -> bool:
     info = get_stock_fundamentals(ticker)
     return (info.get("quoteType") or "").upper() == "ETF"
+
+
+def get_history_fresh(ticker: str, period_label: str):
+    """History for charts, guaranteed current: if the last daily bar lags
+    the current trading session and a live quote exists, splice the quote
+    in as the final point. Returns (df, freshness_note)."""
+    from datetime import datetime
+    try:
+        from zoneinfo import ZoneInfo
+        now = datetime.now(ZoneInfo("America/New_York"))
+    except Exception:
+        now = datetime.utcnow()
+    df = get_history(ticker, period_label)
+    note = ""
+    if df is None or df.empty or "Close" not in df:
+        return df, note
+    last_ts = df.index[-1]
+    last_date = last_ts.date() if hasattr(last_ts, "date") else None
+    note = f"DATA THROUGH {str(last_ts)[:16]}"
+    # splice live quote only on trading days for non-intraday charts
+    if (period_label not in ("1D", "5D") and last_date
+            and now.weekday() < 5 and last_date < now.date()):
+        q = get_quote(ticker)
+        price = q.get("price")
+        if price:
+            stamp = pd.Timestamp(now.replace(tzinfo=None))
+            if getattr(df.index, "tz", None) is not None:
+                stamp = stamp.tz_localize(df.index.tz)
+            row = {c: None for c in df.columns}
+            row.update({"Open": price, "High": price, "Low": price,
+                        "Close": price, "Volume": 0})
+            df = pd.concat([df, pd.DataFrame([row], index=[stamp])])
+            note = (f"DATA THROUGH {now.strftime('%Y-%m-%d %H:%M')} ET "
+                    f"(LIVE QUOTE SPLICED)")
+    return df, note

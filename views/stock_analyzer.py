@@ -5,7 +5,8 @@ from lib import claude_analyst
 from lib.charts import CHART_VIEWS, render_gauge, render_price_chart
 from lib.config import apply_base_style, render_footer, render_sidebar
 from lib.logos import logo_img_html
-from lib.market_data import (PERIOD_MAP, get_history, get_quote,
+from lib.market_data import (PERIOD_MAP, get_history,
+                             get_history_fresh, get_quote,
                              get_stock_fundamentals)
 from lib.news import ticker_news, time_ago
 from lib.signals import at_a_glance, fundamental_score, technical_score
@@ -27,7 +28,7 @@ if not ticker:
 
 info = get_stock_fundamentals(ticker)
 quote = get_quote(ticker)
-df = get_history(ticker, period)
+df, freshness = get_history_fresh(ticker, period)
 
 if df.empty and not info:
     st.warning(f"No data found for **{ticker}**. Check the symbol.")
@@ -64,6 +65,11 @@ baseline = quote.get("prev_close") if period == "1D" else None
 st.plotly_chart(render_price_chart(df, view=view, baseline_price=baseline,
                                    show_volume=True),
                 use_container_width=True)
+if freshness:
+    st.markdown(f'<div style="font-family:Consolas,monospace;'
+                f'font-size:0.68rem;letter-spacing:0.08em;color:#a1a1aa;">'
+                f'{freshness} · REFRESHES EVERY 15 MIN</div>',
+                unsafe_allow_html=True)
 
 # ---- Snapshot ----
 st.divider()
