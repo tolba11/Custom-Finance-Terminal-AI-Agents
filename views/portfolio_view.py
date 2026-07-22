@@ -104,11 +104,11 @@ def _stat_cards(stats: dict, per_row: int = 5):
     for i, (label, val) in enumerate(stats.items()):
         with cols[i % per_row]:
             st.markdown(
-                f'<div style="border:1px solid #e4e4e7;border-left:3px '
-                f'solid #c2410c;padding:0.4rem 0.6rem;margin-bottom:0.5rem;'
-                f'background:#fff;"><span style="font-family:Consolas,'
+                f'<div style="border:1px solid #252c3b;border-left:3px '
+                f'solid #f97316;padding:0.4rem 0.6rem;margin-bottom:0.5rem;'
+                f'background:#161b26;"><span style="font-family:Consolas,'
                 f'monospace;font-size:0.63rem;letter-spacing:0.06em;'
-                f'color:#71717a;">{label.upper()}</span><br>'
+                f'color:#8a93a6;">{label.upper()}</span><br>'
                 f'<span style="font-family:Consolas,monospace;'
                 f'font-weight:600;font-size:1.02rem;">{val}</span></div>',
                 unsafe_allow_html=True)
@@ -132,8 +132,8 @@ with t_over:
         hdr = ('<div style="display:grid;grid-template-columns:26px 4em '
                'minmax(0,1fr) 5em 5.5em 5em 6.5em 6.5em 5.5em;gap:8px;'
                'padding:4px 0;font-family:Consolas,monospace;'
-               'font-size:0.65rem;letter-spacing:0.07em;color:#71717a;'
-               'border-bottom:2px solid #e4e4e7;"><span></span>'
+               'font-size:0.65rem;letter-spacing:0.07em;color:#8a93a6;'
+               'border-bottom:2px solid #252c3b;"><span></span>'
                '<span>TICKER</span><span>NAME</span>'
                '<span style="text-align:right;">WEIGHT</span>'
                '<span style="text-align:right;">PRICE</span>'
@@ -154,9 +154,9 @@ with t_over:
                 f'<div style="display:grid;grid-template-columns:26px 4em '
                 f'minmax(0,1fr) 5em 5.5em 5em 6.5em 6.5em 5.5em;gap:8px;'
                 f'align-items:center;padding:6px 0;border-bottom:1px solid '
-                f'#f4f4f5;">{logo_img_html(r["tk"], 22)}'
+                f'#1a2029;">{logo_img_html(r["tk"], 22)}'
                 f'<b style="font-size:0.85rem;">{r["tk"]}</b>'
-                f'<span style="color:#71717a;font-size:12px;white-space:'
+                f'<span style="color:#8a93a6;font-size:12px;white-space:'
                 f'nowrap;overflow:hidden;text-overflow:ellipsis;">{name}'
                 f'</span><span style="text-align:right;font-family:Consolas'
                 f',monospace;font-size:0.85rem;">{w:.1%}</span>'
@@ -188,16 +188,16 @@ with t_perf:
         fig = go.Figure()
         fig.add_trace(go.Scatter(x=v.index, y=v / v.iloc[0] * 100,
                                  name="Portfolio", mode="lines",
-                                 line=dict(color="#c2410c", width=2.2)))
+                                 line=dict(color="#f97316", width=2.2)))
         if b is not None and b.dropna().shape[0] > 5:
             bb = b.dropna()
             fig.add_trace(go.Scatter(x=bb.index, y=bb / bb.iloc[0] * 100,
                                      name="SPY", mode="lines",
-                                     line=dict(color="#71717a", width=1.6,
+                                     line=dict(color="#8a93a6", width=1.6,
                                                dash="dot")))
-        fig.add_hline(y=100, line_color="#d4d4d8", line_width=1,
+        fig.add_hline(y=100, line_color="#313a4d", line_width=1,
                       line_dash="dot")
-        fig.update_layout(template="plotly_white", height=360,
+        fig.update_layout(template="plotly_dark", height=360,
                           margin=dict(l=10, r=10, t=10, b=10),
                           legend=dict(orientation="h"),
                           yaxis_title="Indexed to 100",
@@ -212,7 +212,7 @@ with t_perf:
                                    mode="lines",
                                    line=dict(color=RED, width=1.4),
                                    fillcolor="rgba(185,28,28,0.12)"))
-        fig.update_layout(template="plotly_white", height=220,
+        fig.update_layout(template="plotly_dark", height=220,
                           margin=dict(l=10, r=10, t=10, b=10),
                           yaxis_ticksuffix="%",
                           paper_bgcolor="rgba(0,0,0,0)")
@@ -249,7 +249,7 @@ with t_attr:
                 marker_color=[GREEN if x >= 0 else RED for x in c.values],
                 text=[f"{x:+.1%}" for x in c.values],
                 textposition="outside"))
-            fig.update_layout(template="plotly_white",
+            fig.update_layout(template="plotly_dark",
                               height=max(240, 34 * len(c)),
                               margin=dict(l=10, r=70, t=10, b=10),
                               xaxis_ticksuffix="%",
@@ -298,11 +298,11 @@ with t_attr:
                 fig = go.Figure()
                 fig.add_trace(go.Bar(name="Allocation", x=eff.index,
                                      y=eff["Allocation"] * 100,
-                                     marker_color="#c2410c"))
+                                     marker_color="#f97316"))
                 fig.add_trace(go.Bar(name="Selection", x=eff.index,
                                      y=eff["Selection"] * 100,
-                                     marker_color="#71717a"))
-                fig.update_layout(template="plotly_white", barmode="group",
+                                     marker_color="#8a93a6"))
+                fig.update_layout(template="plotly_dark", barmode="group",
                                   height=300, yaxis_ticksuffix="%",
                                   margin=dict(l=10, r=10, t=10, b=10),
                                   legend=dict(orientation="h"),
@@ -331,11 +331,11 @@ with t_expo:
             fig = go.Figure()
             fig.add_trace(go.Bar(name="Portfolio", y=secs,
                                  x=[port_sec.get(s, 0) * 100 for s in secs],
-                                 orientation="h", marker_color="#c2410c"))
+                                 orientation="h", marker_color="#f97316"))
             fig.add_trace(go.Bar(name="SPY", y=secs,
                                  x=[bench.get(s, 0) * 100 for s in secs],
-                                 orientation="h", marker_color="#d4d4d8"))
-            fig.update_layout(template="plotly_white", barmode="group",
+                                 orientation="h", marker_color="#313a4d"))
+            fig.update_layout(template="plotly_dark", barmode="group",
                               height=max(300, 34 * len(secs)),
                               xaxis_ticksuffix="%",
                               margin=dict(l=10, r=10, t=10, b=10),
@@ -348,7 +348,7 @@ with t_expo:
                 st.markdown(
                     f'<div style="display:flex;justify-content:'
                     f'space-between;padding:6px 0;border-bottom:1px solid '
-                    f'#f4f4f5;"><span style="color:#71717a;font-size:'
+                    f'#1a2029;"><span style="color:#8a93a6;font-size:'
                     f'0.85rem;">{label}</span><b style="font-family:'
                     f'Consolas,monospace;">{val}</b></div>',
                     unsafe_allow_html=True)
@@ -411,10 +411,10 @@ with t_risk:
             fig = go.Figure(go.Heatmap(
                 z=corr.values, x=corr.columns, y=corr.index,
                 zmin=-1, zmax=1,
-                colorscale=[[0, "#b91c1c"], [0.5, "#ffffff"],
-                            [1, "#047857"]],
+                colorscale=[[0, "#ea3943"], [0.5, "#161b26"],
+                            [1, "#16c784"]],
                 text=corr.values, texttemplate="%{text}"))
-            fig.update_layout(template="plotly_white", height=380,
+            fig.update_layout(template="plotly_dark", height=380,
                               margin=dict(l=10, r=10, t=10, b=10),
                               paper_bgcolor="rgba(0,0,0,0)")
             st.plotly_chart(fig, use_container_width=True)

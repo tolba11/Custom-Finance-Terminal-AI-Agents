@@ -29,18 +29,18 @@ def row(title, meta, link, summary="", badge=None):
     if badge:
         badge_html = (f'<span style="font-family:Consolas,monospace;'
                       f'font-size:0.65rem;letter-spacing:0.06em;'
-                      f'background:#c2410c;color:#fff;padding:1px 6px;'
+                      f'background:#f97316;color:#161b26;padding:1px 6px;'
                       f'margin-left:8px;vertical-align:middle;">{badge}'
                       f'</span>')
-    summary_html = (f'<div style="color:#71717a;font-size:0.83rem;'
+    summary_html = (f'<div style="color:#8a93a6;font-size:0.83rem;'
                     f'padding-top:2px;">{summary}</div>' if summary else "")
     st.markdown(
-        f'<div style="padding:9px 0;border-bottom:1px solid #f4f4f5;">'
-        f'<a href="{link}" target="_blank" style="color:#18181b;'
+        f'<div style="padding:9px 0;border-bottom:1px solid #1a2029;">'
+        f'<a href="{link}" target="_blank" style="color:#dee3ea;'
         f'text-decoration:none;font-weight:600;font-size:0.95rem;">'
         f'{title}</a>{badge_html}'
         f'<div style="font-family:Consolas,monospace;font-size:0.7rem;'
-        f'letter-spacing:0.05em;color:#a1a1aa;padding-top:2px;">{meta}'
+        f'letter-spacing:0.05em;color:#5c6575;padding-top:2px;">{meta}'
         f'</div>{summary_html}</div>', unsafe_allow_html=True)
 
 

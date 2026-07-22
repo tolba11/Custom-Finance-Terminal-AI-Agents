@@ -41,7 +41,7 @@ pick = st.selectbox("Chart an indicator", list(indicators.keys()))
 s = indicators[pick]["series"]
 fig = go.Figure(go.Scatter(x=s.index, y=s.values, mode="lines",
                            line=dict(color="#38bdf8", width=2)))
-fig.update_layout(template="plotly_white", height=380,
+fig.update_layout(template="plotly_dark", height=380,
                   margin=dict(l=10, r=10, t=20, b=10),
                   paper_bgcolor="rgba(0,0,0,0)",
                   title=indicators[pick]["desc"])
@@ -55,7 +55,7 @@ if not curve.empty:
     fig = go.Figure(go.Scatter(x=list(curve.index), y=curve.values,
                                mode="lines+markers",
                                line=dict(color="#a78bfa", width=2)))
-    fig.update_layout(template="plotly_white", height=360,
+    fig.update_layout(template="plotly_dark", height=360,
                       margin=dict(l=10, r=10, t=20, b=10),
                       yaxis_ticksuffix="%", paper_bgcolor="rgba(0,0,0,0)")
     st.plotly_chart(fig, use_container_width=True)
@@ -66,7 +66,7 @@ if not hist.empty:
     for col, color in zip(hist.columns, ("#f472b6", "#38bdf8")):
         fig.add_trace(go.Scatter(x=hist.index, y=hist[col], mode="lines",
                                  name=col, line=dict(color=color, width=1.5)))
-    fig.update_layout(template="plotly_white", height=320,
+    fig.update_layout(template="plotly_dark", height=320,
                       margin=dict(l=10, r=10, t=30, b=10),
                       yaxis_ticksuffix="%", title="2Y vs 10Y over time",
                       paper_bgcolor="rgba(0,0,0,0)")

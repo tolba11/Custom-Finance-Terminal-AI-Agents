@@ -50,11 +50,11 @@ for turn in history:
         if turn.get("citations"):
             st.markdown(
                 '<div style="font-family:Consolas,monospace;font-size:'
-                '0.7rem;letter-spacing:0.06em;color:#71717a;'
+                '0.7rem;letter-spacing:0.06em;color:#8a93a6;'
                 'padding-top:6px;">SOURCES</div>', unsafe_allow_html=True)
             for i, c in enumerate(turn["citations"][:8], 1):
                 st.markdown(f'<a href="{c}" target="_blank" '
-                            f'style="font-size:0.78rem;color:#c2410c;">'
+                            f'style="font-size:0.78rem;color:#f97316;">'
                             f'[{i}] {c[:90]}</a>', unsafe_allow_html=True)
 
 submission = st.chat_input(
@@ -98,12 +98,12 @@ if submission:
             if cites:
                 st.markdown(
                     '<div style="font-family:Consolas,monospace;font-size:'
-                    '0.7rem;letter-spacing:0.06em;color:#71717a;'
+                    '0.7rem;letter-spacing:0.06em;color:#8a93a6;'
                     'padding-top:6px;">SOURCES</div>',
                     unsafe_allow_html=True)
                 for i, c in enumerate(cites[:8], 1):
                     st.markdown(f'<a href="{c}" target="_blank" '
-                                f'style="font-size:0.78rem;color:#c2410c;">'
+                                f'style="font-size:0.78rem;color:#f97316;">'
                                 f'[{i}] {c[:90]}</a>', unsafe_allow_html=True)
             history.append({"role": "assistant", "content": text,
                             "citations": cites})

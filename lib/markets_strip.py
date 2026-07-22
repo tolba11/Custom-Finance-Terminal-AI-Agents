@@ -27,14 +27,14 @@ def render_markets_strip():
             for sym, label in items:
                 q = quotes.get(sym, {})
                 p, pc = q.get("price"), q.get("change_pct")
-                color = ("#047857" if (pc or 0) >= 0 else "#b91c1c")
+                color = ("#16c784" if (pc or 0) >= 0 else "#ea3943")
                 ptxt = f"{p:,.2f}" if p is not None else "—"
                 ctxt = f"{pc:+.2f}%" if pc is not None else ""
                 st.markdown(
                     f'<div style="display:grid;grid-template-columns:'
                     f'minmax(0,1fr) 5.5em 4.6em;gap:8px;align-items:center;'
-                    f'padding:5px 0;border-bottom:1px solid #f4f4f5;">'
-                    f'<span style="color:#3f3f46;font-size:0.85rem;'
+                    f'padding:5px 0;border-bottom:1px solid #1a2029;">'
+                    f'<span style="color:#b7c0d0;font-size:0.85rem;'
                     f'white-space:nowrap;overflow:hidden;text-overflow:'
                     f'ellipsis;">{label}</span>'
                     f'<span style="text-align:right;font-family:Consolas,'

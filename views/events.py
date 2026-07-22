@@ -75,12 +75,12 @@ if ticker:
                       ("buy", "Positive", "#22c55e"),
                       ("hold", "Neutral", "#eab308"),
                       ("sell", "Negative", "#f87171"),
-                      ("strongSell", "Strong negative", "#b91c1c")]
+                      ("strongSell", "Strong negative", "#ea3943")]
             for col, label, color in series:
                 if col in df:
                     fig.add_trace(go.Bar(x=df["period"], y=df[col],
                                          name=label, marker_color=color))
-            fig.update_layout(barmode="stack", template="plotly_white",
+            fig.update_layout(barmode="stack", template="plotly_dark",
                               height=380, margin=dict(l=10, r=10, t=20, b=10),
                               legend=dict(orientation="h", y=-0.15),
                               paper_bgcolor="rgba(0,0,0,0)")
@@ -97,16 +97,16 @@ if ticker:
         if ins:
             for t in ins[:15]:
                 chg = t.get("change") or 0
-                color = "#22c55e" if chg > 0 else "#ef4444" if chg < 0 else "#71717a"
+                color = "#22c55e" if chg > 0 else "#ef4444" if chg < 0 else "#8a93a6"
                 verb = "acquired" if chg > 0 else "disposed of" if chg < 0 else "held"
                 price = t.get("transactionPrice")
                 price_txt = f" @ ${price:,.2f}" if price else ""
                 st.markdown(
                     f'<div style="padding:5px 0;border-bottom:1px solid '
-                    f'#e4e4e7;"><b>{t.get("name", "?")}</b> '
+                    f'#252c3b;"><b>{t.get("name", "?")}</b> '
                     f'<span style="color:{color};">{verb} '
                     f'{abs(chg):,.0f} shares</span>'
-                    f'<span style="color:#71717a;">{price_txt} · '
+                    f'<span style="color:#8a93a6;">{price_txt} · '
                     f'{t.get("transactionDate", "")}</span></div>',
                     unsafe_allow_html=True)
             st.caption("Source: SEC Form 4 filings, Finnhub.")

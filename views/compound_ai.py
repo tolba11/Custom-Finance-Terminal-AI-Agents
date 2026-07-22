@@ -31,12 +31,12 @@ with c1:
     for name, desc in caps:
         st.markdown(
             f'<div style="display:flex;gap:12px;padding:6px 0;'
-            f'border-bottom:1px solid #e4e4e7;">'
+            f'border-bottom:1px solid #252c3b;">'
             f'<span style="font-family:Consolas,monospace;'
             f'text-transform:uppercase;font-size:0.75rem;'
-            f'letter-spacing:0.06em;min-width:150px;color:#3f3f46;">'
+            f'letter-spacing:0.06em;min-width:150px;color:#b7c0d0;">'
             f'{name}</span>'
-            f'<span style="color:#71717a;font-size:0.85rem;">{desc}</span>'
+            f'<span style="color:#8a93a6;font-size:0.85rem;">{desc}</span>'
             f'</div>', unsafe_allow_html=True)
 with c2:
     st.markdown('<div class="tt-func">'

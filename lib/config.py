@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-APP_NAME = "Tolba Terminal"
+APP_NAME = "Pyramid Terminal"
 
 
 def _sanitize(val):
@@ -45,7 +45,7 @@ def get_finnhub_key():
 def render_footer(st):
     """Thin terminal footer."""
     st.markdown(
-        '<div class="tt-footer">TOLBA TERMINAL — market data may be '
+        '<div class="tt-footer">PYRAMID TERMINAL — market data may be '
         'delayed</div>', unsafe_allow_html=True)
 
 
@@ -66,7 +66,7 @@ def apply_base_style(st):
         html, body, [class*="css"], .main .block-container {
             font-family: 'Segoe UI', 'Liberation Sans', 'DejaVu Sans', Arial, sans-serif;
             font-size: 15px;
-            color: #18181b;
+            color: #dee3ea;
         }
         .main .block-container { padding-top: 1.2rem; max-width: 1500px; }
 
@@ -76,7 +76,7 @@ def apply_base_style(st):
             text-transform: uppercase;
             letter-spacing: 0.06em;
             font-size: 1.55rem !important;
-            border-bottom: 3px solid #c2410c;
+            border-bottom: 3px solid #f97316;
             padding-bottom: 0.35rem;
         }
         h2, h3 {
@@ -84,7 +84,7 @@ def apply_base_style(st):
             text-transform: uppercase;
             letter-spacing: 0.05em;
             font-size: 1.02rem !important;
-            color: #3f3f46;
+            color: #b7c0d0;
         }
 
         /* metrics: mono numerals, dense */
@@ -97,17 +97,17 @@ def apply_base_style(st):
             font-family: 'IBM Plex Mono', 'Consolas', 'Liberation Mono', 'DejaVu Sans Mono', monospace;
             font-size: 0.72rem;
             letter-spacing: 0.08em;
-            color: #71717a;
+            color: #8a93a6;
         }
         [data-testid="stMetric"] {
-            background: #ffffff;
-            border: 1px solid #e4e4e7;
-            border-left: 3px solid #c2410c;
+            background: #161b26;
+            border: 1px solid #252c3b;
+            border-left: 3px solid #f97316;
             padding: 0.45rem 0.7rem;
         }
 
         /* tables + dataframes: dense terminal grid */
-        [data-testid="stDataFrame"] { border: 1px solid #e4e4e7; }
+        [data-testid="stDataFrame"] { border: 1px solid #252c3b; }
         [data-testid="stDataFrame"] * {
             font-family: 'IBM Plex Mono', 'Consolas', 'Liberation Mono', 'DejaVu Sans Mono', monospace !important;
             font-size: 12.5px !important;
@@ -115,8 +115,8 @@ def apply_base_style(st):
 
         /* sidebar: flat, bordered */
         [data-testid="stSidebar"] {
-            background: #f7f7f5;
-            border-right: 1px solid #e4e4e7;
+            background: #10141d;
+            border-right: 1px solid #252c3b;
         }
         [data-testid="stSidebarNav"] a span,
         [data-testid="stSidebarNav"] span {
@@ -132,36 +132,36 @@ def apply_base_style(st):
             font-size: 1.05rem;
             letter-spacing: 0.12em;
             line-height: 1.35;
-            color: #18181b;
+            color: #dee3ea;
             padding: 0.4rem 0 0.8rem 0;
-            border-bottom: 2px solid #c2410c;
+            border-bottom: 2px solid #f97316;
             margin-bottom: 0.6rem;
         }
         .tt-brand-mark {
             display: inline-block; width: 11px; height: 11px;
-            background: #c2410c; margin-right: 8px;
+            background: #f97316; margin-right: 8px;
         }
         .tt-subtitle {
             font-family: 'IBM Plex Mono', 'Consolas', 'Liberation Mono', 'DejaVu Sans Mono', monospace;
             font-size: 0.75rem; letter-spacing: 0.14em;
-            color: #71717a; margin: 0.2rem 0 0.8rem 0;
+            color: #8a93a6; margin: 0.2rem 0 0.8rem 0;
         }
         .tt-footer {
             font-family: 'IBM Plex Mono', 'Consolas', 'Liberation Mono', 'DejaVu Sans Mono', monospace;
-            font-size: 0.68rem; letter-spacing: 0.1em; color: #a1a1aa;
-            border-top: 1px solid #e4e4e7;
+            font-size: 0.68rem; letter-spacing: 0.1em; color: #5c6575;
+            border-top: 1px solid #252c3b;
             padding-top: 0.5rem; margin-top: 2rem;
         }
         .tt-func {
-            border: 1px solid #e4e4e7; border-left: 3px solid #c2410c;
-            padding: 0.7rem 0.9rem; margin-bottom: 0.6rem; background: #fff;
+            border: 1px solid #252c3b; border-left: 3px solid #f97316;
+            padding: 0.7rem 0.9rem; margin-bottom: 0.6rem; background: #161b26;
         }
         .tt-func-name {
             font-family: 'IBM Plex Mono', 'Consolas', 'Liberation Mono', 'DejaVu Sans Mono', monospace; font-weight: 600;
             text-transform: uppercase; letter-spacing: 0.06em;
             font-size: 0.85rem;
         }
-        .tt-func-desc { color: #71717a; font-size: 0.82rem; }
+        .tt-func-desc { color: #8a93a6; font-size: 0.82rem; }
 
         /* segmented controls / buttons: square terminal chips */
         button[kind] { border-radius: 2px !important; }
@@ -178,20 +178,20 @@ def apply_base_style(st):
         /* ===== control chrome: terminal-grade ===== */
         /* tabs: flat list, orange active underline */
         div[data-baseweb="tab-list"] {
-            gap: 0; border-bottom: 2px solid #e4e4e7;
+            gap: 0; border-bottom: 2px solid #252c3b;
             background: transparent;
         }
         button[data-baseweb="tab"] {
             font-family: 'IBM Plex Mono', 'Consolas', 'Liberation Mono', 'DejaVu Sans Mono', monospace !important;
             text-transform: uppercase; letter-spacing: 0.07em;
             font-size: 0.78rem !important; font-weight: 600;
-            color: #71717a; background: transparent !important;
+            color: #8a93a6; background: transparent !important;
             border-radius: 0 !important; padding: 0.55rem 1.1rem;
             margin-bottom: -2px; border-bottom: 3px solid transparent;
         }
-        button[data-baseweb="tab"]:hover { color: #18181b; background: #f7f7f5 !important; }
+        button[data-baseweb="tab"]:hover { color: #dee3ea; background: #10141d !important; }
         button[data-baseweb="tab"][aria-selected="true"] {
-            color: #c2410c !important; border-bottom: 3px solid #c2410c;
+            color: #f97316 !important; border-bottom: 3px solid #f97316;
         }
         div[data-baseweb="tab-highlight"], div[data-baseweb="tab-border"] { display: none; }
         button[data-baseweb="tab"] p { font-size: 0.78rem !important; font-weight: 600; }
@@ -202,15 +202,15 @@ def apply_base_style(st):
             font-family: 'IBM Plex Mono', 'Consolas', 'Liberation Mono', 'DejaVu Sans Mono', monospace !important;
             text-transform: uppercase; letter-spacing: 0.08em;
             font-size: 0.75rem !important; font-weight: 600;
-            border-radius: 0 !important; border: 1px solid #18181b !important;
-            color: #18181b; background: #ffffff;
+            border-radius: 0 !important; border: 1px solid #dee3ea !important;
+            color: #dee3ea; background: #161b26;
             padding: 0.35rem 1.1rem; transition: all .12s ease;
         }
         .stButton > button:hover, .stDownloadButton > button:hover {
-            background: #c2410c !important; border-color: #c2410c !important;
-            color: #ffffff !important;
+            background: #f97316 !important; border-color: #f97316 !important;
+            color: #161b26 !important;
         }
-        .stButton > button:focus:not(:active) { border-color: #c2410c !important; color: #c2410c; }
+        .stButton > button:focus:not(:active) { border-color: #f97316 !important; color: #f97316; }
 
         /* segmented control: joined square group, orange active */
         [data-testid="stSegmentedControl"] button,
@@ -218,17 +218,17 @@ def apply_base_style(st):
             font-family: 'IBM Plex Mono', 'Consolas', 'Liberation Mono', 'DejaVu Sans Mono', monospace !important;
             font-size: 0.74rem !important; font-weight: 600;
             letter-spacing: 0.05em; border-radius: 0 !important;
-            border: 1px solid #d4d4d8 !important; margin-left: -1px;
-            color: #52525b; background: #ffffff; padding: 0.25rem 0.8rem;
+            border: 1px solid #313a4d !important; margin-left: -1px;
+            color: #9aa4b6; background: #161b26; padding: 0.25rem 0.8rem;
         }
         [data-testid="stSegmentedControl"] button:hover,
-        [data-testid="stButtonGroup"] button:hover { background: #f7f7f5; color: #18181b; }
+        [data-testid="stButtonGroup"] button:hover { background: #10141d; color: #dee3ea; }
         [data-testid="stSegmentedControl"] button[aria-checked="true"],
         [data-testid="stSegmentedControl"] button[kind="segmented_controlActive"],
         [data-testid="stButtonGroup"] button[aria-checked="true"],
         [data-testid^="stBaseButton-segmented_controlActive"] {
-            background: #18181b !important; color: #ffffff !important;
-            border-color: #18181b !important;
+            background: #dee3ea !important; color: #161b26 !important;
+            border-color: #dee3ea !important;
         }
 
         /* inputs + selects: square, mono, orange focus */
@@ -239,7 +239,7 @@ def apply_base_style(st):
             font-size: 0.85rem !important;
         }
         [data-baseweb="input"]:focus-within, [data-baseweb="select"] > div:focus-within {
-            border-color: #c2410c !important; box-shadow: none !important;
+            border-color: #f97316 !important; box-shadow: none !important;
         }
         [data-baseweb="popover"] li {
             font-family: 'IBM Plex Mono', 'Consolas', 'Liberation Mono', 'DejaVu Sans Mono', monospace !important;
@@ -249,34 +249,34 @@ def apply_base_style(st):
         [data-testid="stWidgetLabel"] p {
             font-family: 'IBM Plex Mono', 'Consolas', 'Liberation Mono', 'DejaVu Sans Mono', monospace !important;
             text-transform: uppercase; letter-spacing: 0.07em;
-            font-size: 0.68rem !important; color: #71717a !important;
+            font-size: 0.68rem !important; color: #8a93a6 !important;
         }
 
         /* expanders: bordered square panels, mono header */
         [data-testid="stExpander"] {
-            border: 1px solid #e4e4e7 !important; border-radius: 0 !important;
-            background: #ffffff;
+            border: 1px solid #252c3b !important; border-radius: 0 !important;
+            background: #161b26;
         }
         [data-testid="stExpander"] summary {
             font-family: 'IBM Plex Mono', 'Consolas', 'Liberation Mono', 'DejaVu Sans Mono', monospace !important;
             text-transform: uppercase; letter-spacing: 0.07em;
             font-size: 0.75rem !important; font-weight: 600;
         }
-        [data-testid="stExpander"] summary:hover { color: #c2410c !important; }
+        [data-testid="stExpander"] summary:hover { color: #f97316 !important; }
 
         /* alerts: square, accent bar */
         [data-testid="stAlert"] {
-            border-radius: 0 !important; border: 1px solid #e4e4e7;
-            border-left: 3px solid #c2410c;
+            border-radius: 0 !important; border: 1px solid #252c3b;
+            border-left: 3px solid #f97316;
             font-size: 0.85rem;
         }
 
         /* dividers tighter, captions mono */
-        hr { border-color: #e4e4e7 !important; margin: 0.8rem 0 !important; }
+        hr { border-color: #252c3b !important; margin: 0.8rem 0 !important; }
         [data-testid="stCaptionContainer"] p {
             font-family: 'IBM Plex Mono', 'Consolas', 'Liberation Mono', 'DejaVu Sans Mono', monospace !important;
             font-size: 0.68rem !important; letter-spacing: 0.04em;
-            color: #a1a1aa !important;
+            color: #5c6575 !important;
         }
 
         /* chat input square */
@@ -292,9 +292,9 @@ def apply_base_style(st):
         [data-testid="stSidebarNav"] a {
             border-radius: 0 !important; border-left: 3px solid transparent;
         }
-        [data-testid="stSidebarNav"] a:hover { border-left: 3px solid #d4d4d8; }
+        [data-testid="stSidebarNav"] a:hover { border-left: 3px solid #313a4d; }
         [data-testid="stSidebarNav"] a[aria-current="page"] {
-            border-left: 3px solid #c2410c; background: #ffffff !important;
+            border-left: 3px solid #f97316; background: #161b26 !important;
         }
         </style>
         """,

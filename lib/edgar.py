@@ -2,7 +2,7 @@
 import requests
 import streamlit as st
 
-HEADERS = {"User-Agent": "TolbaTerminal personal research "
+HEADERS = {"User-Agent": "PyramidTerminal personal research "
                          "yassintolba2003@gmail.com"}
 
 FORM_TYPES = ["All", "10-K", "10-Q", "8-K", "DEF 14A", "S-1", "20-F", "6-K"]

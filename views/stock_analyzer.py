@@ -40,8 +40,8 @@ st.markdown(
     f'<div style="display:flex;align-items:center;gap:14px;">'
     f'{logo_img_html(ticker, 64, domain=info.get("website"))}'
     f'<div><h2 style="margin:0;">{name} '
-    f'<span style="color:#71717a;font-size:0.7em;">{ticker}</span></h2>'
-    f'<span style="color:#71717a;">{sector}</span></div></div>',
+    f'<span style="color:#8a93a6;font-size:0.7em;">{ticker}</span></h2>'
+    f'<span style="color:#8a93a6;">{sector}</span></div></div>',
     unsafe_allow_html=True)
 
 m1, m2, m3, m4 = st.columns(4)
@@ -70,7 +70,7 @@ st.plotly_chart(render_price_chart(df, view=view, baseline_price=baseline,
                 use_container_width=True)
 if freshness:
     st.markdown(f'<div style="font-family:Consolas,monospace;'
-                f'font-size:0.68rem;letter-spacing:0.08em;color:#a1a1aa;">'
+                f'font-size:0.68rem;letter-spacing:0.08em;color:#5c6575;">'
                 f'{freshness} · REFRESHES EVERY 15 MIN</div>',
                 unsafe_allow_html=True)
 
@@ -89,8 +89,8 @@ with g1:
         for label, value in chips:
             st.markdown(
                 f'<div style="display:flex;justify-content:space-between;'
-                f'padding:5px 0;border-bottom:1px solid #e4e4e7;">'
-                f'<span style="color:#71717a;">{label}</span>'
+                f'padding:5px 0;border-bottom:1px solid #252c3b;">'
+                f'<span style="color:#8a93a6;">{label}</span>'
                 f'<b>{value}</b></div>', unsafe_allow_html=True)
 with g2:
     st.plotly_chart(render_gauge(tech["score"], "Technical strength",
@@ -159,7 +159,7 @@ for i, (group, rows) in enumerate(stats.items()):
         for label, value in rows:
             st.markdown(
                 f'<div style="display:flex;justify-content:space-between;'
-                f'padding:3px 0;"><span style="color:#71717a;">{label}'
+                f'padding:3px 0;"><span style="color:#8a93a6;">{label}'
                 f'</span><span>{value}</span></div>',
                 unsafe_allow_html=True)
 
@@ -209,19 +209,19 @@ with tab3:
                 avg = sum(scores) / len(scores)
                 lbl = ("Bullish tilt" if avg > 0.15 else
                        "Bearish tilt" if avg < -0.15 else "Neutral")
-                color = ("#047857" if avg > 0.15 else
-                         "#b91c1c" if avg < -0.15 else "#71717a")
+                color = ("#16c784" if avg > 0.15 else
+                         "#ea3943" if avg < -0.15 else "#8a93a6")
                 st.markdown(
-                    f'<div style="border:1px solid #e4e4e7;border-left:'
+                    f'<div style="border:1px solid #252c3b;border-left:'
                     f'3px solid {color};padding:0.5rem 0.8rem;'
-                    f'margin-bottom:0.6rem;background:#fff;">'
+                    f'margin-bottom:0.6rem;background:#161b26;">'
                     f'<span style="font-family:Consolas,monospace;'
                     f'font-size:0.7rem;letter-spacing:0.08em;'
-                    f'color:#71717a;">NEWS SENTIMENT (ALPHA VANTAGE, '
+                    f'color:#8a93a6;">NEWS SENTIMENT (ALPHA VANTAGE, '
                     f'{len(scores)} ARTICLES)</span><br>'
                     f'<b style="color:{color};">{lbl}</b> '
                     f'<span style="font-family:Consolas,monospace;'
-                    f'color:#71717a;">score {avg:+.2f}</span></div>',
+                    f'color:#8a93a6;">score {avg:+.2f}</span></div>',
                     unsafe_allow_html=True)
     for item in ticker_news(ticker, limit=6):
         with st.container(border=True):

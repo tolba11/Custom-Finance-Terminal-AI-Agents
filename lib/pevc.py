@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 import requests
 import streamlit as st
 
-UA = {"User-Agent": "Mozilla/5.0 (TolbaTerminal personal dashboard)"}
+UA = {"User-Agent": "Mozilla/5.0 (PyramidTerminal personal dashboard)"}
 
 
 # ---------- Deals: PE deal headlines via Google News RSS ----------

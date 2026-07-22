@@ -1,4 +1,4 @@
-# Tolba Terminal
+# Pyramid Terminal
 
 A Bloomberg-style personal finance terminal built with Streamlit.
 Live at **https://tolbaterminal.streamlit.app**
@@ -52,7 +52,7 @@ streamlit run app.py
 ```
 
 
-## Build your own Tolba Terminal
+## Build your own Pyramid Terminal
 
 Everything below is free-tier. Total setup time is roughly 30 minutes.
 
@@ -109,7 +109,7 @@ PERPLEXITY_API_KEY = "..."
 - Add a view: create `views/my_view.py`, register it in
   `lib/registry.py` — navigation and the Home function grid update
   automatically.
-- Change the accent color: search-and-replace `#c2410c` in
+- Change the accent color: search-and-replace `#f97316` in
   `lib/config.py` and `.streamlit/config.toml`.
 
 ## Architecture

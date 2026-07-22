@@ -43,14 +43,14 @@ elif articles:
             a["author"],
             time_ago(a["published"]) if a["published"] else "") if x)
         st.markdown(
-            f'<div style="padding:9px 0;border-bottom:1px solid #f4f4f5;">'
-            f'<a href="{a["link"]}" target="_blank" style="color:#18181b;'
+            f'<div style="padding:9px 0;border-bottom:1px solid #1a2029;">'
+            f'<a href="{a["link"]}" target="_blank" style="color:#dee3ea;'
             f'text-decoration:none;font-weight:600;font-size:0.95rem;">'
             f'{a["title"]}</a>'
             f'<div style="font-family:Consolas,monospace;font-size:0.7rem;'
-            f'letter-spacing:0.05em;color:#a1a1aa;padding-top:2px;">'
+            f'letter-spacing:0.05em;color:#5c6575;padding-top:2px;">'
             f'{meta.upper()}</div>'
-            f'<div style="color:#71717a;font-size:0.83rem;padding-top:2px;">'
+            f'<div style="color:#8a93a6;font-size:0.83rem;padding-top:2px;">'
             f'{a["summary"][:260]}</div></div>', unsafe_allow_html=True)
 
 render_footer(st)

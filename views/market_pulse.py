@@ -71,7 +71,7 @@ st.plotly_chart(render_price_chart(spx, view=view,
                 use_container_width=True)
 if spx_fresh:
     st.markdown(f'<div style="font-family:Consolas,monospace;'
-                f'font-size:0.68rem;letter-spacing:0.08em;color:#a1a1aa;">'
+                f'font-size:0.68rem;letter-spacing:0.08em;color:#5c6575;">'
                 f'{spx_fresh} · REFRESHES EVERY 15 MIN</div>',
                 unsafe_allow_html=True)
 
@@ -105,16 +105,16 @@ def render_mover_rows(items):
         name = it.get("shortName") or it.get("longName") or ""
         price = it.get("regularMarketPrice")
         pct = it.get("regularMarketChangePercent")
-        color = "#047857" if (pct or 0) >= 0 else "#b91c1c"
+        color = "#16c784" if (pct or 0) >= 0 else "#ea3943"
         if price is not None and pct is not None:
             st.markdown(
                 f'<div style="display:grid;'
                 f'grid-template-columns:26px 3.4em minmax(0,1fr) 4.6em 4.6em;'
                 f'gap:8px;align-items:center;padding:6px 0;'
-                f'border-bottom:1px solid #f4f4f5;">'
+                f'border-bottom:1px solid #1a2029;">'
                 f'{logo_img_html(sym, 22)}'
                 f'<b style="font-size:0.85rem;">{sym}</b>'
-                f'<span style="color:#71717a;font-size:12px;'
+                f'<span style="color:#8a93a6;font-size:12px;'
                 f'white-space:nowrap;overflow:hidden;'
                 f'text-overflow:ellipsis;">{name}</span>'
                 f'<span style="text-align:right;font-family:Consolas,'
@@ -149,12 +149,12 @@ if region == "U.S.":
         s = pd.Series(perf).sort_values()
         fig = go.Figure(go.Bar(
             x=s.values, y=s.index, orientation="h",
-            marker_color=["#047857" if v >= 0 else "#b91c1c"
+            marker_color=["#16c784" if v >= 0 else "#ea3943"
                           for v in s.values],
             text=[f"{v:+.2f}%" for v in s.values],
             textposition="outside",
         ))
-        fig.update_layout(template="plotly_white", height=420,
+        fig.update_layout(template="plotly_dark", height=420,
                           margin=dict(l=10, r=60, t=10, b=10),
                           xaxis_ticksuffix="%",
                           paper_bgcolor="rgba(0,0,0,0)")

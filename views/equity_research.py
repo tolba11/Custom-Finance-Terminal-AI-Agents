@@ -19,7 +19,7 @@ if not get_anthropic_key():
     st.stop()
 
 STAGE_LABELS = {k: (label, group) for k, label, group in STAGES}
-VERDICT_COLORS = {"BUY": "#047857", "HOLD": "#b45309", "SELL": "#b91c1c"}
+VERDICT_COLORS = {"BUY": "#16c784", "HOLD": "#b45309", "SELL": "#ea3943"}
 
 # ---- controls ----
 c1, c2, c3, c4 = st.columns([2, 2, 2, 1])
@@ -62,17 +62,17 @@ def render_progress(container, statuses, duration=None):
                 st.markdown(
                     f'<div style="font-family:Consolas,monospace;'
                     f'text-transform:uppercase;font-size:0.72rem;'
-                    f'letter-spacing:0.08em;color:#71717a;'
+                    f'letter-spacing:0.08em;color:#8a93a6;'
                     f'margin:10px 0 2px 0;">{grp}</div>',
                     unsafe_allow_html=True)
             s = statuses.get(key, "pending")
-            color = {"pending": "#a1a1aa", "running": "#c2410c",
-                     "done": "#047857"}[s]
+            color = {"pending": "#5c6575", "running": "#f97316",
+                     "done": "#16c784"}[s]
             text = {"pending": "pending", "running": "generating",
                     "done": "completed"}[s]
             st.markdown(
                 f'<div style="display:flex;justify-content:space-between;'
-                f'padding:3px 0;border-bottom:1px solid #f4f4f5;'
+                f'padding:3px 0;border-bottom:1px solid #1a2029;'
                 f'font-size:0.85rem;"><span>{label}</span>'
                 f'<span style="color:{color};font-family:Consolas,monospace;'
                 f'font-size:0.75rem;">{text}</span></div>',
@@ -122,10 +122,10 @@ if result and not run:
         v = result["verdict"]
         color = VERDICT_COLORS.get(v, "#b45309")
         st.markdown(
-            f'<div style="border:1px solid #e4e4e7;border-left:4px solid '
-            f'{color};padding:0.9rem 1.2rem;background:#fff;">'
+            f'<div style="border:1px solid #252c3b;border-left:4px solid '
+            f'{color};padding:0.9rem 1.2rem;background:#161b26;">'
             f'<span style="font-family:Consolas,monospace;font-size:0.72rem;'
-            f'letter-spacing:0.1em;color:#71717a;">FINAL RECOMMENDATION '
+            f'letter-spacing:0.1em;color:#8a93a6;">FINAL RECOMMENDATION '
             f'— {result["ticker"]}</span><br>'
             f'<span style="font-family:Consolas,monospace;font-weight:700;'
             f'font-size:2.2rem;color:{color};">{v}</span></div>',

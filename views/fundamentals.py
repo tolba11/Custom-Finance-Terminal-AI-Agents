@@ -30,8 +30,8 @@ with c2:
         f'padding-top:1.6rem;">'
         f'{logo_img_html(ticker, 44, domain=info.get("website"))}'
         f'<div><b style="font-size:1.05rem;">{name}</b> '
-        f'<span style="color:#71717a;">{ticker}</span><br>'
-        f'<span style="color:#71717a;font-size:0.8rem;">'
+        f'<span style="color:#8a93a6;">{ticker}</span><br>'
+        f'<span style="color:#8a93a6;font-size:0.8rem;">'
         f'{" · ".join(x for x in (info.get("sector"), info.get("industry")) if x)}'
         f'</span></div></div>', unsafe_allow_html=True)
 
@@ -81,11 +81,11 @@ def render_statement(which: str, headline_rows: list):
             fig = go.Figure(go.Bar(
                 x=[str(c)[:10] for c in series.index],
                 y=series.values / 1e9,
-                marker_color=["#047857" if v >= 0 else "#b91c1c"
+                marker_color=["#16c784" if v >= 0 else "#ea3943"
                               for v in series.values],
                 text=[f"{v/1e9:,.1f}" for v in series.values],
                 textposition="outside"))
-            fig.update_layout(template="plotly_white", height=240,
+            fig.update_layout(template="plotly_dark", height=240,
                               margin=dict(l=10, r=10, t=30, b=10),
                               yaxis_title="$B", title=hr,
                               paper_bgcolor="rgba(0,0,0,0)")
@@ -125,16 +125,16 @@ elif section == "SEC Filings":
             st.markdown(
                 f'<div style="display:grid;grid-template-columns:6.5em '
                 f'7em minmax(0,1fr) 5em;gap:10px;align-items:center;'
-                f'padding:7px 0;border-bottom:1px solid #f4f4f5;">'
+                f'padding:7px 0;border-bottom:1px solid #1a2029;">'
                 f'<span style="font-family:Consolas,monospace;'
                 f'font-weight:600;font-size:0.8rem;">{f["form"]}</span>'
                 f'<span style="font-family:Consolas,monospace;'
-                f'font-size:0.8rem;color:#71717a;">{f["date"]}</span>'
-                f'<span style="font-size:0.85rem;color:#3f3f46;'
+                f'font-size:0.8rem;color:#8a93a6;">{f["date"]}</span>'
+                f'<span style="font-size:0.85rem;color:#b7c0d0;'
                 f'white-space:nowrap;overflow:hidden;text-overflow:'
                 f'ellipsis;">{f["desc"]}</span>'
                 f'<a href="{f["url"]}" target="_blank" '
-                f'style="color:#c2410c;font-family:Consolas,monospace;'
+                f'style="color:#f97316;font-family:Consolas,monospace;'
                 f'font-size:0.78rem;font-weight:600;">OPEN</a></div>',
                 unsafe_allow_html=True)
 
@@ -156,17 +156,17 @@ elif section == "Earnings & Transcripts":
                 x=[r.get("fiscalDateEnding", "")[:7] for r in qs],
                 y=[float(r["estimatedEPS"]) if r.get("estimatedEPS")
                    not in (None, "None") else None for r in qs],
-                marker_color="#d4d4d8"))
+                marker_color="#313a4d"))
             fig.add_trace(go.Bar(
                 name="Actual",
                 x=[r.get("fiscalDateEnding", "")[:7] for r in qs],
                 y=[float(r["reportedEPS"]) if r.get("reportedEPS")
                    not in (None, "None") else None for r in qs],
-                marker_color=["#047857" if (r.get("surprise") or "0")
+                marker_color=["#16c784" if (r.get("surprise") or "0")
                               not in ("None", None) and
                               float(r.get("surprise") or 0) >= 0
-                              else "#b91c1c" for r in qs]))
-            fig.update_layout(barmode="group", template="plotly_white",
+                              else "#ea3943" for r in qs]))
+            fig.update_layout(barmode="group", template="plotly_dark",
                               height=300,
                               margin=dict(l=10, r=10, t=10, b=10),
                               legend=dict(orientation="h"),
@@ -202,14 +202,14 @@ elif section == "Earnings & Transcripts":
                 for s in shown:
                     st.markdown(
                         f'<div style="padding:8px 0;border-bottom:1px '
-                        f'solid #f4f4f5;"><span style="font-family:'
+                        f'solid #1a2029;"><span style="font-family:'
                         f'Consolas,monospace;font-size:0.72rem;'
-                        f'letter-spacing:0.06em;color:#c2410c;'
+                        f'letter-spacing:0.06em;color:#f97316;'
                         f'font-weight:600;">'
                         f'{(s.get("speaker") or "?").upper()} '
-                        f'<span style="color:#a1a1aa;">'
+                        f'<span style="color:#5c6575;">'
                         f'{s.get("title") or ""}</span></span>'
-                        f'<div style="font-size:0.88rem;color:#3f3f46;'
+                        f'<div style="font-size:0.88rem;color:#b7c0d0;'
                         f'padding-top:2px;">{s.get("content") or ""}'
                         f'</div></div>', unsafe_allow_html=True)
         else:

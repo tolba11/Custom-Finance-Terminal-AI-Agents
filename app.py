@@ -1,7 +1,7 @@
-"""Tolba Terminal — entrypoint and router."""
+"""Pyramid Terminal — entrypoint and router."""
 import streamlit as st
 
-st.set_page_config(page_title="Tolba Terminal", layout="wide",
+st.set_page_config(page_title="Pyramid Terminal", layout="wide",
                    initial_sidebar_state="expanded")
 
 from lib.registry import PAGES
@@ -31,7 +31,7 @@ except Exception:
     _tz = "UTC"
 st.sidebar.markdown(
     f'<div style="font-family:Consolas,monospace;font-size:0.68rem;'
-    f'letter-spacing:0.08em;color:#71717a;padding-top:6px;">'
+    f'letter-spacing:0.08em;color:#8a93a6;padding-top:6px;">'
     f'AUTO-REFRESH 15 MIN<br>UPDATED '
     f'{_now.strftime("%H:%M")} {_tz} · {_now.strftime("%b %d")}'
     f'</div>', unsafe_allow_html=True)

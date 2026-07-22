@@ -109,7 +109,7 @@ def symbol_search(label: str, key: str, default: str,
     current = st.session_state[sel_key]
     st.markdown(
         f'<div style="font-family:Consolas,monospace;font-size:0.72rem;'
-        f'letter-spacing:0.06em;color:#71717a;padding:2px 0 6px 0;">'
-        f'SELECTED: <span style="color:#c2410c;font-weight:600;">'
+        f'letter-spacing:0.06em;color:#8a93a6;padding:2px 0 6px 0;">'
+        f'SELECTED: <span style="color:#f97316;font-weight:600;">'
         f'{current}</span></div>', unsafe_allow_html=True)
     return current

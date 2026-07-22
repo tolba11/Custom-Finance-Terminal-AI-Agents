@@ -42,7 +42,7 @@ st.markdown(
     f'<div style="display:flex;align-items:center;gap:14px;">'
     f'{logo_img_html(ticker, 56, domain=info.get("website"))}'
     f'<div><h2 style="margin:0;">{name} '
-    f'<span style="color:#71717a;font-size:0.7em;">{ticker}</span></h2>'
+    f'<span style="color:#8a93a6;font-size:0.7em;">{ticker}</span></h2>'
     f'</div></div>', unsafe_allow_html=True)
 
 m1, m2, m3, m4 = st.columns(4)
@@ -64,7 +64,7 @@ st.plotly_chart(render_price_chart(df, view=view, baseline_price=baseline),
                 use_container_width=True)
 if freshness:
     st.markdown(f'<div style="font-family:Consolas,monospace;'
-                f'font-size:0.68rem;letter-spacing:0.08em;color:#a1a1aa;">'
+                f'font-size:0.68rem;letter-spacing:0.08em;color:#5c6575;">'
                 f'{freshness} · REFRESHES EVERY 15 MIN</div>',
                 unsafe_allow_html=True)
 
@@ -117,7 +117,7 @@ if sectors:
                            marker_color="#38bdf8",
                            text=[f"{v:.1f}%" for v in s.values],
                            textposition="outside"))
-    fig.update_layout(template="plotly_white", height=380,
+    fig.update_layout(template="plotly_dark", height=380,
                       margin=dict(l=10, r=60, t=10, b=10),
                       xaxis_ticksuffix="%", paper_bgcolor="rgba(0,0,0,0)")
     st.plotly_chart(fig, use_container_width=True)
@@ -137,9 +137,9 @@ if holdings is not None and not holdings.empty:
         with hcols[i % 2]:
             st.markdown(
                 f'<div style="display:flex;align-items:center;gap:8px;'
-                f'padding:5px 0;border-bottom:1px solid #e4e4e7;">'
+                f'padding:5px 0;border-bottom:1px solid #252c3b;">'
                 f'{logo_img_html(sym, 26)}<b>{sym}</b>'
-                f'<span style="color:#71717a;font-size:13px;">{hname}</span>'
+                f'<span style="color:#8a93a6;font-size:13px;">{hname}</span>'
                 f'<span style="margin-left:auto;">'
                 f'{w:.2%}</span></div>' if w is not None else
                 f'<div style="padding:5px 0;">{sym} {hname}</div>',

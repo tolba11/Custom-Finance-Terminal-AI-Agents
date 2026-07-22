@@ -91,10 +91,10 @@ def _letter_uri(ticker: str, size: int) -> str:
     letter = (ticker or "?")[0].upper()
     svg = (f"<svg xmlns='http://www.w3.org/2000/svg' width='{size}' "
            f"height='{size}'><rect width='100%' height='100%' rx='6' "
-           f"fill='#e4e4e7'/><text x='50%' y='55%' "
+           f"fill='#252c3b'/><text x='50%' y='55%' "
            f"dominant-baseline='middle' text-anchor='middle' "
            f"font-family='Arial,sans-serif' font-weight='600' "
-           f"font-size='{int(size * 0.5)}' fill='#3f3f46'>{letter}</text>"
+           f"font-size='{int(size * 0.5)}' fill='#b7c0d0'>{letter}</text>"
            f"</svg>")
     return "data:image/svg+xml;utf8," + quote(svg)
 
@@ -112,7 +112,7 @@ def logo_img_html(ticker: str, size: int = 28, domain: str = None) -> str:
     tk = (ticker or "").upper().replace("/", "-")
     style = (f'width:{size}px;height:{size}px;border-radius:6px;'
              f'object-fit:contain;vertical-align:middle;'
-             f'background:#f4f4f5;padding:2px;flex-shrink:0;')
+             f'background:#e9edf3;padding:2px;flex-shrink:0;')
     local = get_logo_data_url(tk)
     letter = _letter_uri(tk, size)
     if local:
