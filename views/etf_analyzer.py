@@ -15,6 +15,8 @@ from lib.symbol_search import symbol_search
 
 apply_base_style(st)
 render_sidebar(st)
+from lib.copilot import copilot
+copilot("ETF Analyzer")
 st.title("ETF Analyzer")
 
 c1, c2 = st.columns([1, 3])

@@ -10,6 +10,8 @@ from lib.rates import get_curve_history, get_yield_curve
 
 apply_base_style(st)
 render_sidebar(st)
+from lib.copilot import copilot
+copilot("Macro")
 st.title("Macro")
 
 if not get_fred_key():

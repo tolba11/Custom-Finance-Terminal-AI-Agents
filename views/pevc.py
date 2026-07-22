@@ -15,6 +15,8 @@ def _safe(fn, *args):
 
 apply_base_style(st)
 render_sidebar(st)
+from lib.copilot import copilot
+copilot("PE/VC")
 st.title("PE / VC")
 st.markdown('<div class="tt-subtitle">PRIVATE MARKETS — DEALS, RAISES, '
             'AND OPERATOR RESEARCH · REFRESHES EVERY 15 MIN</div>',

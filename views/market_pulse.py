@@ -14,6 +14,8 @@ from lib.news import market_news, time_ago
 
 apply_base_style(st)
 render_sidebar(st)
+from lib.copilot import copilot
+copilot("Market Pulse")
 t_l, t_r = st.columns([3, 1.6])
 with t_l:
     st.title("Market Pulse")

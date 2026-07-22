@@ -11,6 +11,8 @@ from lib.watchlist import load_watchlist, save_watchlist
 
 apply_base_style(st)
 render_sidebar(st)
+from lib.copilot import copilot
+copilot("Home dashboard")
 
 st.title("Pyramid Terminal")
 st.markdown('<div class="tt-subtitle">WORKSPACE · LIVE DATA · '
@@ -79,7 +81,8 @@ with c_wl:
                 if st.button("Remove", key="wl_rm_btn") and rm:
                     save_watchlist([t for t in wl if t not in rm])
                     st.rerun()
-    _safe(_watchlist)
+    with st.container(border=True):
+        _safe(_watchlist)
 
 with c_ix:
     def _indices():
@@ -90,7 +93,8 @@ with c_ix:
             price, pct = q.get("price"), q.get("change_pct")
             _row('<span></span>', name, "",
                  f"{price:,.2f}" if price else "—", pct)
-    _safe(_indices)
+    with st.container(border=True):
+        _safe(_indices)
 
 with c_sec:
     def _sectors():
@@ -116,7 +120,8 @@ with c_sec:
                 f'<span style="text-align:right;font-family:Consolas,'
                 f'monospace;font-size:0.78rem;color:{color};">{pct:+.2f}%'
                 f'</span></div>', unsafe_allow_html=True)
-    _safe(_sectors)
+    with st.container(border=True):
+        _safe(_sectors)
 
 st.markdown("<div style='height:14px'></div>", unsafe_allow_html=True)
 
@@ -124,7 +129,8 @@ st.markdown("<div style='height:14px'></div>", unsafe_allow_html=True)
 def _strip():
     _card_open("COMMODITIES · FX · RATES")
     render_markets_strip()
-_safe(_strip)
+with st.container(border=True):
+    _safe(_strip)
 
 st.markdown("<div style='height:14px'></div>", unsafe_allow_html=True)
 
@@ -148,7 +154,8 @@ with c_news:
                 f'monospace;font-size:0.65rem;letter-spacing:0.05em;">'
                 f'{pub.upper()} {("· " + ago) if ago else ""}</span></div>',
                 unsafe_allow_html=True)
-    _safe(_news)
+    with st.container(border=True):
+        _safe(_news)
 
 with c_fn:
     def _funcs():
@@ -164,6 +171,7 @@ with c_fn:
                     f'<div class="tt-func"><span class="tt-func-name">'
                     f'{title}</span><br><span class="tt-func-desc">{desc}'
                     f'</span></div></a>', unsafe_allow_html=True)
-    _safe(_funcs)
+    with st.container(border=True):
+        _safe(_funcs)
 
 render_footer(st)

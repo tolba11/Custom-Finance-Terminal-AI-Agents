@@ -17,6 +17,8 @@ from lib.risk import compute_risk_score
 
 apply_base_style(st)
 render_sidebar(st)
+from lib.copilot import copilot
+copilot("Portfolio")
 st.title("Portfolio")
 st.markdown('<div class="tt-subtitle">PERFORMANCE · ATTRIBUTION · '
             'EXPOSURES · RISK — BENCHMARKED TO SPY · PA-ENGINE STYLE '

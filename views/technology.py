@@ -7,6 +7,8 @@ from lib.techcrunch import SECTIONS, fetch_techcrunch
 
 apply_base_style(st)
 render_sidebar(st)
+from lib.copilot import copilot
+copilot("Technology")
 st.title("Technology")
 st.markdown('<div class="tt-subtitle">TECHCRUNCH — SECTION FEEDS · '
             'REFRESHES EVERY 15 MIN</div>', unsafe_allow_html=True)

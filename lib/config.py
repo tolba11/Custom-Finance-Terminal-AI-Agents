@@ -53,8 +53,20 @@ def render_sidebar(st):
     """Terminal brand block in the sidebar."""
     st.sidebar.markdown(
         '<div class="tt-brand"><span class="tt-brand-mark"></span>'
-        'TOLBA<br>TERMINAL</div>',
+        'PYRAMID<br>TERMINAL</div>',
         unsafe_allow_html=True)
+    q = st.sidebar.text_input("Jump to ticker", key="omni_q",
+                              placeholder="AAPL, 7203.T, BTC-USD")
+    if q and q.strip():
+        t = q.strip().upper()
+        if st.session_state.get("omni_last") != t:
+            st.session_state["omni_last"] = t
+            st.session_state["sa_symbol"] = t
+            st.session_state["sa_q"] = t
+            try:
+                st.switch_page("views/stock_analyzer.py")
+            except Exception:
+                pass
 
 
 def apply_base_style(st):
@@ -295,6 +307,23 @@ def apply_base_style(st):
         [data-testid="stSidebarNav"] a:hover { border-left: 3px solid #313a4d; }
         [data-testid="stSidebarNav"] a[aria-current="page"] {
             border-left: 3px solid #f97316; background: #161b26 !important;
+        }
+        
+        /* widget cards (OpenBB-style) */
+        [data-testid="stVerticalBlockBorderWrapper"] {
+            background: #11151f; border: 1px solid #252c3b !important;
+            border-radius: 0 !important;
+        }
+        [data-testid="stVerticalBlockBorderWrapper"]:hover {
+            border-color: #3a4356 !important;
+        }
+        /* copilot popover trigger */
+        [data-testid="stPopover"] button {
+            border: 1px solid #f97316 !important;
+            color: #f97316 !important; background: transparent !important;
+        }
+        [data-testid="stPopover"] button:hover {
+            background: #f97316 !important; color: #0e1117 !important;
         }
         </style>
         """,

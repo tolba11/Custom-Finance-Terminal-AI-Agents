@@ -13,6 +13,8 @@ from lib.symbol_search import symbol_search
 
 apply_base_style(st)
 render_sidebar(st)
+from lib.copilot import copilot
+copilot("Financial Statements")
 st.title("Financial Statements")
 st.markdown('<div class="tt-subtitle">STATEMENTS · SEC FILINGS · '
             'EARNINGS CALLS — YAHOO FINANCE + ALPHA VANTAGE + EDGAR</div>',

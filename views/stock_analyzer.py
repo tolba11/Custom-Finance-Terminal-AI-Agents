@@ -26,6 +26,15 @@ if not ticker:
 
 info = get_stock_fundamentals(ticker)
 quote = get_quote(ticker)
+from lib.copilot import copilot
+copilot("Stock Analyzer", context=(
+    f"Ticker {ticker}; name {info.get('longName')}; "
+    f"price {quote.get('price')}; day change "
+    f"{quote.get('change_pct')}%; sector {info.get('sector')}; "
+    f"PE {info.get('trailingPE')}; market cap "
+    f"{info.get('marketCap')}; beta {info.get('beta')}; "
+    f"52w high {info.get('fiftyTwoWeekHigh')}; "
+    f"52w low {info.get('fiftyTwoWeekLow')}"))
 
 if not info and quote.get("price") is None:
     st.warning(f"No data found for **{ticker}**. Check the symbol.")

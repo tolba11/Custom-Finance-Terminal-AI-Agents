@@ -8,6 +8,8 @@ from lib.symbol_search import symbol_search
 
 apply_base_style(st)
 render_sidebar(st)
+from lib.copilot import copilot
+copilot("News")
 st.title("News")
 
 
