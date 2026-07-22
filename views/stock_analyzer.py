@@ -16,22 +16,18 @@ apply_base_style(st)
 render_sidebar(st)
 st.title("Stock Analyzer")
 
-c1, c2 = st.columns([1, 3])
+c1, _ = st.columns([1, 3])
 with c1:
     ticker = symbol_search("Ticker or company", "sa", "AAPL",
-                       region_filter=True)
-with c2:
-    period = st.segmented_control("Period", list(PERIOD_MAP.keys()),
-                                  default="1Y", key="sa_period") or "1Y"
+                           region_filter=True)
 
 if not ticker:
     st.stop()
 
 info = get_stock_fundamentals(ticker)
 quote = get_quote(ticker)
-df, freshness = get_history_fresh(ticker, period)
 
-if df.empty and not info:
+if not info and quote.get("price") is None:
     st.warning(f"No data found for **{ticker}**. Check the symbol.")
     render_footer(st)
     st.stop()
@@ -60,8 +56,14 @@ beta = info.get("beta")
 m4.metric("Beta", f"{beta:.2f}" if beta else "—")
 
 # ---- Chart ----
-view = st.segmented_control("View", CHART_VIEWS, default="Performance",
-                            key="sa_view") or "Performance"
+cv, cp = st.columns([1.15, 3])
+with cv:
+    view = st.segmented_control("View", CHART_VIEWS, default="Performance",
+                                key="sa_view") or "Performance"
+with cp:
+    period = st.segmented_control("Period", list(PERIOD_MAP.keys()),
+                                  default="1Y", key="sa_period") or "1Y"
+df, freshness = get_history_fresh(ticker, period)
 baseline = quote.get("prev_close") if period == "1D" else None
 st.plotly_chart(render_price_chart(df, view=view, baseline_price=baseline,
                                    show_volume=True),
