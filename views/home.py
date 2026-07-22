@@ -55,8 +55,8 @@ def _safe(fn):
         st.caption(f"Detail: {type(e).__name__}: {e}")
 
 
-# ============ ROW 1: watchlist | indices | sectors ============
-c_wl, c_ix, c_sec = st.columns([1.35, 1, 1])
+# ============ ROW 1: watchlist | sectors ============
+c_wl, c_sec = st.columns([1.15, 1])
 
 with c_wl:
     def _watchlist():
@@ -83,18 +83,6 @@ with c_wl:
                     st.rerun()
     with st.container(border=True):
         _safe(_watchlist)
-
-with c_ix:
-    def _indices():
-        _card_open("INDICES & ASSETS")
-        quotes = get_quotes_bulk(tuple(INDEX_TICKERS.keys()))
-        for tk, name in INDEX_TICKERS.items():
-            q = quotes.get(tk, {})
-            price, pct = q.get("price"), q.get("change_pct")
-            _row('<span></span>', name, "",
-                 f"{price:,.2f}" if price else "—", pct)
-    with st.container(border=True):
-        _safe(_indices)
 
 with c_sec:
     def _sectors():
@@ -125,7 +113,28 @@ with c_sec:
 
 st.markdown("<div style='height:14px'></div>", unsafe_allow_html=True)
 
-# ============ ROW 2: markets strip ============
+# ============ ROW 2: indices & assets tile board ============
+def _indices():
+    _card_open("INDICES & ASSETS")
+    quotes = get_quotes_bulk(tuple(INDEX_TICKERS.keys()))
+    items = list(INDEX_TICKERS.items())
+    for start in range(0, len(items), 5):
+        cols = st.columns(5)
+        for i, (tk, name) in enumerate(items[start:start + 5]):
+            q = quotes.get(tk, {})
+            price, pct = q.get("price"), q.get("change_pct")
+            with cols[i]:
+                if price is not None:
+                    st.metric(name.upper(), f"{price:,.2f}",
+                              f"{pct:+.2f}%" if pct is not None else None)
+                else:
+                    st.metric(name.upper(), "—")
+with st.container(border=True):
+    _safe(_indices)
+
+st.markdown("<div style='height:14px'></div>", unsafe_allow_html=True)
+
+# ============ ROW 3: markets strip ============
 def _strip():
     _card_open("COMMODITIES · FX · RATES")
     render_markets_strip()
