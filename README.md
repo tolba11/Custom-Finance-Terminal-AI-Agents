@@ -1,7 +1,7 @@
 # Pyramid Terminal
 
 A Bloomberg-style personal finance terminal built with Streamlit.
-Live at **https://tolbaterminal.streamlit.app**
+Live at **(https://pyramidterminal.streamlit.app/)**
 
 ## Functions
 
